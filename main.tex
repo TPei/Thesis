@@ -20,8 +20,10 @@
 \usepackage{graphicx}
 \usepackage{german}
 \usepackage[bookmarks]{hyperref}
-%\usepackage[applemac]{inputenc}
-\usepackage[utf8x]{inputenc}
+\usepackage[utf8]{inputenc}
+\usepackage[style=authoryear]{biblatex}
+\bibliography{bibliography}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -120,7 +122,6 @@
 
 \begin{document}
 
-
   \frontmatter
 
 
@@ -163,12 +164,12 @@
 
 
   \backmatter
-  \include{bibliographie}
-  \bibliography{bibliographie}{}
   \markboth{}{}
 
 
   \include{danksagung}
+  
+  \printbibliography
 
 
 
