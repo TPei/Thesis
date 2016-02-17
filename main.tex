@@ -1,0 +1,175 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%            LMU-Vorlage              %%
+%%                                     %%
+%%         zur Erstellung einer        %%
+%%   Dissertation mit pdflatex/latex   %%
+%%                                     %%
+%%  (2002) Robert Dahlke               %%
+%%         & Sigmund Stintzing         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt]{book}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%   Zusaetzliche Pakete  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{a4wide}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{german}
+\usepackage[bookmarks]{hyperref}
+%\usepackage[applemac]{inputenc}
+\usepackage[utf8x]{inputenc}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Definition der Kopfzeile %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagestyle{fancyplain}
+\renewcommand{\chaptermark}[1]%
+         {\markboth{\thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]%
+         {\markright{\thesection\ #1}}
+\lhead[\fancyplain{}{\bfseries\thepage}]%
+    {\fancyplain{}{\bfseries\rightmark}}
+\rhead[\fancyplain{}{\bfseries\leftmark}]%
+    {\fancyplain{}{\bfseries\thepage}}
+\cfoot{}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  Definition des Deckblattes und der Titelseite  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\LMUTitle}[9]{
+  \thispagestyle{empty}
+  \vspace*{\stretch{1}}
+  {\parindent0cm
+   \rule{\linewidth}{.7ex}}
+  \begin{flushright}
+
+    \vspace*{\stretch{1}}
+    \sffamily\bfseries\Huge
+    #1\\
+    \vspace*{\stretch{1}}
+    \sffamily\bfseries\large
+    #2
+    \vspace*{\stretch{1}}
+  \end{flushright}
+  \rule{\linewidth}{.7ex}
+  \vspace*{\stretch{5}}
+  \begin{center}
+    \includegraphics[width=2in]{FHFLLogo}
+  \end{center}
+  \vspace*{\stretch{1}}
+  \begin{center}\sffamily\LARGE{#5}\end{center}
+  \newpage
+  \thispagestyle{empty}
+
+  \cleardoublepage
+  \thispagestyle{empty}
+
+  \vspace*{\stretch{1}}
+  {\parindent0cm
+  \rule{\linewidth}{.7ex}}
+  \begin{flushright}
+    \vspace*{\stretch{1}}
+    \sffamily\bfseries\Huge
+    #1\\
+    \vspace*{\stretch{1}}
+    \sffamily\bfseries\large
+    #2
+    \vspace*{\stretch{1}}
+  \end{flushright}
+  \rule{\linewidth}{.7ex}
+
+  \vspace*{\stretch{3}}
+  \begin{center}
+    \Large Bachelorarbeit\\
+    \Large an der Fachhochschule Flensburg\\
+    \vspace*{\stretch{1}}
+    \Large vorgelegt von\\
+    \Large #2\\
+    \vspace*{\stretch{2}}
+    \Large Flensburg, den #6
+  \end{center}
+
+  \newpage
+  \thispagestyle{empty}
+
+  \vspace*{\stretch{1}}
+
+  \begin{flushleft}
+    \large Erstgutachter:  #7 \\[1mm]
+    \large Zweitgutachter: #8 \\[1mm]
+    \large Tag der m\"undlichen Pr\"ufung: #9\\
+  \end{flushleft}
+
+  \cleardoublepage
+}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  Beginn des Dokuments  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+
+  \frontmatter
+
+
+  \LMUTitle
+      {Entwicklung eines Microservices zur Augmentierung einer bestehenden monolithischen Anwendung}               % Titel der Arbeit
+      {Thomas Peikert}                       % Vor- und Nachname des Autors
+      {Berlin}                             % Geburtsort des Autors
+      {Angewandte Informatik}                         % Name der Fakultaet
+      {Flensburg 2016}                          % Ort und Jahr der Erstellung
+      {01.04.2016}                            % Tag der Abgabe
+      {Prof. Dr. Milena Zachow}                          % Name des Erstgutachters
+      {Prof. Dr. Hans-Werner Lang}                         % Name des Zweitgutachters
+      {Pr"ufungsdatum}                         % Datum der muendlichen Pruefung
+
+
+  \tableofcontents
+  \markboth{Inhaltsverzeichnis}{Inhaltsverzeichnis}
+
+
+  \listoffigures
+  \markboth{Abbildungsverzeichnis}{Abbildungsverzeichnis}
+
+
+  \listoftables
+  \markboth{Tabellenverzeichnis}{Tabellenverzeichnis}
+  \cleardoublepage
+
+
+  \markboth{Zusammenfassung}{Zusammenfassung}
+  \include{zusammenfassung}
+
+
+  \mainmatter\setcounter{page}{1}
+  \include{kap_01}
+  \include{kap_02}
+  %\include{kap_03}
+  %\include{kap_04} usw.
+  \include{kap_05}
+  \include{anhang}
+
+
+  \backmatter
+  \include{bibliographie}
+  \bibliography{bibliographie}{}
+  \markboth{}{}
+
+
+  \include{danksagung}
+
+
+
+\end{document}

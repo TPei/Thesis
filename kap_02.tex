@@ -1,0 +1,31 @@
+\chapter{Microservice Architecture als Weg robuste und skalierbare Anwendungen zu entwickeln}
+?Microservice Architecture? beschreibt einen Stil der Softwareentwicklung, der vor Allem durch die Trennung einer großen Gesamtanwendung, in kleinere, separate Teile gekennzeichnet ist. (fn ANHANG Quelle)
+
+Anstatt einer großen Anwendung, deren einzelne Teile gemeinsam deployt werden, in einem gemeinsamen repository liegen und auf der Ebene der genutzten Programmiersprache kommunizieren, wird bei der Microservice Architecture die Gesamtanwendung in einzelne Teilanwendungen aufgesplittet. Diese liegen in separaten Repositories, können getrennt voneinander deployt werden und kommunizieren über externe Schnittstellen, wie HTTP APIs. Diese separaten Teilanwendungen sind meist anhand von Aufgabengebieten getrennt und identifiziert. Die Trennung nach Single Responsibility Principle (fn ANHANG SRP) wird hier von der Ebene des Codes in die der Gesamtarchitektur gehoben. Dies hat Vor- und Nachteile.
+
+Microservice Architektur bringt vor allem Unterschiede mit sich. Viele dieser Unterschiede können sich positiv auswirken, wenn die Geschäftsprozesse erfolgreich angepasst werden. Hierzu zählt die Möglichkeit separater Deploys, besser überblickbare Codeteile und eine passgenauere Skalierbarkeit der benötigten Leistung. Microservice Architektur ist aber ebenso mit diversen Herausforderungen verbunden. Vor allem die Integration der verschiedenen Services, die Kommunikation und das Monitoring der Teilservices sind mit Mehraufwand verbunden.~\cite{feathers2004working}.
+
+\section{Microservices als Werkzeug zum Management von Komplexität}
+Durch diese Aufteilung in einzelne Teilanwendungen werden jedoch Komplexitäten keineswegs reduziert. Der entstehende Overhead zur Verwaltung verschiedener Codebases, standardisierter Schnittstellen, separater Deploys und separatem Monitoring erzeugt zunächst einmal einen größeren Aufwand. Stattdessen bieten Microservices jedoch viele Optimierungsmöglichkeiten. Klar strukturierte Codebases verschaffen einen besseren Überblick, sodass sich Entwickler leichter in ein Aufgabe einarbeiten können ohne sich durch irrelevante Codeteile arbeiten zu müssen. ähnlich wie das Single Responsibility Principle auf Methoden- oder Klassenebene gilt, so gilt es auch auf Service Ebene. Getrennte, klar strukturierte Codeteile erhöhen die Wiederverwendbarkeit, erleichtern die Einarbeitung und das Management des Codes. Ebenso können Änderungen leichter eingearbeitet werden, da die Chance Seiteneffekten reduziert ist. Komplexitäten werden demnach nicht per sé reduziert, sie werden jedoch aufgetrennt und verschoben. Somit werden sie leichter zu handhaben.
+
+So lassen sich zum Einen kleinere, autonome Anwendungsteile aus Entwicklersicht besser verwalten. Die einzelnen Anwendungsteile müssen aber über eine standardisierte Schnittstelle kommunizieren. Diese Aufrufe, die in der Regel über das Intra- oder Internet stattfinden sind in der Regel aufwändiger als simple Code Calls. Wie diese API calls stattfinden ist nicht zwangsläufig vorgeschrieben [WAS FUR MOGLICHKEITEN GIBT ES]
+
+
+\section{Herausforderungen und Potentiale von Microservices}
+Wie bereits erläutert, ist die Microservices Architecture von der ?klassischen? monolithischen Anwendungsentwicklung erst einmal grundlegend verschieden. Diese Unterschiede bilden Vor- und Nachteile der Microservice Architecture.
+
+\section{Der Weg zum Microservice}
+Wie eine Anwendung, bestehend aus verschiedenen Microservices, entsteht und entwickelt wird , hängt von der konkreten Ausgangssituation ab. Hier kann man in verschiedenen Situationen unterscheiden:
+
+1. Es neuer Anwendungsteil soll entwickelt werden. Die Aufgaben des neuen Anwendungsteils sind weder in der bestehenden Anwendung, noch extern vorhanden. Es wird neuer Code geschrieben und in die bestehende Anwendung integriert.
+
+2. Ein bereits bestehender Anwendungsteil soll von Grund auf neu geschrieben werden. Bestehender Code wird ersetzt und der neue Code in die bestehende Anwendung integriert.
+
+3. Ein bereits bestehender Anwendungsteil soll zu einem Microservice umgebaut werden. Der bestehende Code soll nicht ersetzt, sondern lediglich verschoben werden. Die Schnittstellen zum bestehenden Code müssen erneuert werden.
+
+Zwar unterscheiden sich die drei aufgeführten Ausgangssituationen im Endprodukt nicht zwangsläufig. In der Entwicklung des Microservices muss aber grundlegend anders vorgegangen werden. 
+
+Im ersten Fall kann der neue Anwendungsteil nach idealen und neuen Vorstellungen entwickelt werden. Zwar muss auch hier eine Integration zum bestehenden Code geschaffen werden, es gibt aber keine bisherige Implementation die beachtet werden muss. Die Entwickler haben die freie Wahl, die bestmögliche Integrationsform zu wählen.
+
+Der zweite und dritte Fall unterscheiden sich nicht grundlegend. Die bestehende Schnittstelle zur betroffenen Funktion muss komplett überarbeitet werden. Sowohl in der bestehenden, als auch in der neu entstehenden Anwendung muss diese Schnittstelle geschaffen werden. Auch wenn nur existierender Code verschoben wird muss in der Regel eine komplett neue Schnittstelle geschaffen werden. Wo vorher code calls genutzt wurden, werden nun API calls genutzt. 
+Je nach Komplexität und Struktur der Anwendung kann der zweite oder der dritte Fall in der Umsetzung schwieriger sein. Je nach Alter des bestehenden Codes ist eine Neuentwicklung teils ratsam. Da die Umarbeitung ohnehin mit erheblichem Arbeitsaufwand verbunden ist, bietet sich eine Optimierung des bestehenden Codes häufig an. Bei großen, komplexen Legacy Anwendungen ist dies in der Praxis aber häufig nicht ratsam.
