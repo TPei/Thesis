@@ -1,5 +1,5 @@
 \chapter{Microservice Architektur als Weg robuste und skalierbare Anwendungen zu entwickeln}
-``Microservice Architektur'' beschreibt einen Stil der Softwareentwicklung, der vor Allem durch die Trennung einer großen Gesamtanwendung, in kleinere, separate Teile gekennzeichnet ist.~\footcite[vgl.][Seite 2]{newman2015building}
+``Microservice Architektur'' beschreibt einen Stil der Softwareentwicklung, der vor Allem durch die Trennung einer großen Gesamtanwendung (Monolith), in kleinere, separate Teile gekennzeichnet ist.~\footcite[vgl.][Seite 2]{newman2015building}
 
 Anstatt einer großen Anwendung, deren einzelne Teile gemeinsam deployt werden, in einem gemeinsamen repository liegen und auf der Ebene der genutzten Programmiersprache kommunizieren, wird bei der Microservice Architektur die Gesamtanwendung in einzelne Teilanwendungen aufgesplittet. Diese liegen in separaten Repositories, können getrennt voneinander deployt werden und kommunizieren über externe Schnittstellen, wie HTTP APIs. Diese separaten Teilanwendungen sind meist anhand von Aufgabengebieten getrennt und identifiziert. Die Trennung nach Single Responsibility Principle~\footcite{wiki:srp} wird hier von der Ebene des Codes in die der Gesamtarchitektur gehoben. Dies hat Vor- und Nachteile.
 
