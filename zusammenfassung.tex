@@ -1,0 +1,9 @@
+\addcontentsline{toc}{chapter}{\protect Abstract}
+
+
+\chapter*{Abstract}
+Die vorliegende Bachelorarbeit beschäftigt sich mit der Entwicklung von Microservices als Alternative zur ``klassischen'', monolithischen Anwendungsentwicklung. Die integralen Bestandteile von ``Microservice Architektur'', sowie deren Vor- und Nachteile werden erläutert und anhand eines praktischen Beispiels umgesetzt.
+
+Im Rahmen der Arbeit wird ein Microservice entwickelt, der eine bestehende monolithische Betriebsanwendung augmentieren soll. Im momentanen Setup werden Userprofildaten in eine Datenbank geschrieben und aus dieser ausgelesen. Aufgrund der hohen Komplexität dieser Daten und der großen Menge an Daten in der Datenbank, benötigen Profilqueries auf die Datenbank viel Zeit. Da das Auslesen dieser Daten ein integraler Bestandteil der Gesamtanwendung ist, soll hier eine Echtzeit-Schnittstelle bereitgestellt werden. Diese soll in Form einer separaten Anwendung in die bestehende Struktur eingebettet werden.
+
+Hierfür soll ein leseoptimiertes Datenbankformat entwickelt werden, die Anwendung soll eine standardisierte Kommunikationsschnittstelle bieten und kann separat auf einer eigenen Infrastruktur deployt werden. Weiterhin muss eine Anbindung an die bestehende Anwendung geschaffen werden, sodass Änderungen an relevanten Daten in die Queryanwendung gelangen. Dies alles dient dem Zweck, Queries auf Userprofile in soweit zu beschleunigen, dass Anfragen auf Userprofildaten in Echtzeit geschehen können.
