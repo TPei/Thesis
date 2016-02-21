@@ -19,16 +19,21 @@ So lassen sich zum Einen kleinere, autonome Anwendungsteile aus Entwicklersicht 
 Die Aufteilung in separate Services kann ebenso das Deployment vereinfachen. Relative kleine Änderungen können leichter deployt werden, da nicht das ganze System erneut deployt werden muss. Bei großen, komplexen Anwendungen kann dies ein ganz eigenes Risiko bilden. Ist das Deployment einer Anwendung riskoreich, wird dies im Allgemeinen seltener durchgeführt. Features werden erst später deployt, doch mit wachsenden Unterschieden zwischen Deployments, wächst auch das Risiko von Fehlern.~\footcite[vgl.][Seite 6]{newman2015building} Separate Deploys machen die Versionsverwaltung von Services jedoch um so wichtiger~\footcite[vgl.][Seite 62]{newman2015building}~\footcite[vgl.][]{Vergleichsartikel}. Breaking Changes können nicht einfach deployt werden und da prallele Deploys verschiedener kommunizierender Services nicht möglich sind, müssen diese Deploys schrittweise und kontrolliert durchgeführt werden: Zunächst muss der Service um eine neue Version erweitert werden, die alte Schnittstelle darf hierbei nicht verändert werden. Meist werden hierzu API Versionen genutzt. So kann die erste Schnittstelle über die URL
 
 \begin{lstlisting}[language=Ruby]
-http://meinservice.tld/api/v1/eineRoute
+https://meinservice.tld/api/v1/eineRoute
 \end{lstlisting}
 
 angesprochen werden. Diese Schnittstelle wird von den Änderungen nicht tangiert. Die neue Schnittstelle umfasst sowohl die neuen, als auch alle alten Funktionen. Sie ist über die URL
 
 \begin{lstlisting}[language=Ruby]
-http://meinservice.tld/api/v2/eineRoute
+https://meinservice.tld/api/v2/eineRoute
 \end{lstlisting}
 
 anzusprechen. Nach Deploy dieser neuen Service Version, wird als nächstes der konsumierende Code geupdated. Hierbei wird die Nutzung der Funktionen auf die neue Version aktualisiert und die Request auf die neue URL umgeleitet. Alle Referenzen zur alten Route des konsumierten Services sollten hierbei entfernt werden. Abschließen kann, solange sichergestellt ist, dass die alte Service Version nicht mehr genutzt wird, der Service ein weiteres mal geupdated werden. Hierbei wird der Code der alten Version entfernt. Dies ist in der Regel nur bei firmeninternen APIs üblich. Externe APIs sollten in veralteten Versionen noch eine gewisse Zeit angeboten werden. Sollte in der neuen API Version ein Fehler auftreten, muss, vorausgesetzt v1 ist unverändert zu erreich, nur der konsumierende Service gerollbacked werden. Datenbankmigrationen müssen hier nach dem gleichen Prinzip ebenso in mehreren Schritten durchgeführt werden. Das deployment kann also in vielen Fällen bei Microservices leichter sein, sich bei großen Änderungen aber ggf. auch schwierig gestalten.
+
+Weiterhin ermöglichen separate Services auch das separate Skalieren der Anwendung. Bei Monolithen beschränkt sich die Skalierung im Allgemeinen auf Load Balancing~\footcite[vgl.][]{infaktuell}. Hierzu wird eine Anwendung auf mehrere Server dupliziert. Die Anwendungsreplikation sind funktional identisch. Ein Load Balancer verteilt dann die ankommenden Requests auf verschiedene Server. Diese verteilte Last ist aber unabhängig von den einzelnen Anwendungsteilen. Diese können eine unterschiedliche Individuallast haben, dies kann jedoch über den Load Balancer nicht betrachtet werden. 
+Bei Microservices hingegen kann mintuiöser skaliert werden (fn ANHANG QUELLE)...
+
+Einzelne Services beudeuten aber nicht nur die Möglichkeit von granulärer Kontrolle, sondern auch die Pflicht der separaten Überwachung. Wo monolithische Anwendungen eine Quelle dies das jenes BLA BLA BLA haben, haben Microservices viele~\footcite[vgl.][]{Heroku:GoMicro}
 
 \section{Der Weg zum Microservice}
 Wie eine Anwendung, bestehend aus verschiedenen Microservices, entsteht und entwickelt wird , hängt von der konkreten Ausgangssituation ab. Hier kann man in verschiedenen Situationen unterscheiden:
