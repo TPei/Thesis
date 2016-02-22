@@ -47,16 +47,18 @@ Zu guter Letzt sollte man die reine Entwicklungszeit betrachten. Zwar ist die se
 
 \section{Der Weg zum Microservice}
 Wie eine Anwendung, bestehend aus verschiedenen Microservices, entsteht und entwickelt wird, hängt von der konkreten Ausgangssituation ab. Hier kann man in verschiedenen Situationen unterscheiden:
-
-1. Es neuer Anwendungsteil soll entwickelt werden. Die Aufgaben des neuen Anwendungsteils sind weder in der bestehenden Anwendung, noch extern vorhanden. Es wird neuer Code geschrieben und in die bestehende Anwendung integriert.
-
-2. Ein bereits bestehender Anwendungsteil soll von Grund auf neu geschrieben werden. Bestehender Code wird ersetzt und der neue Code in die bestehende Anwendung integriert.
-
-3. Ein bereits bestehender Anwendungsteil soll zu einem Microservice umgebaut werden. Der bestehende Code soll nicht ersetzt, sondern lediglich verschoben werden. Die Schnittstellen zum bestehenden Code müssen erneuert werden.
-
+\begin{description}
+  \item[Aufsplittung] \hfill \\
+  Ein bereits bestehender Anwendungsteil soll zu einem Microservice umgebaut werden. Der bestehende Code soll nicht ersetzt, sondern lediglich verschoben werden. Die Schnittstellen zum bestehenden Code müssen erneuert werden.
+  \item[Rewrite] \hfill \\
+  Ein bereits bestehender Anwendungsteil soll von Grund auf neu geschrieben werden. Bestehender Code wird ersetzt und der neue Code als separeter Service in die bestehende Anwendung integriert.
+  \item[Erweiterung] \hfill \\
+  Ein neuer Anwendungsteil soll entwickelt werden. Die Aufgaben des neuen Anwendungsteils sind weder in der bestehenden Anwendung, noch extern vorhanden. Es wird neuer Code geschrieben und in die bestehende Anwendung integriert.
+\end{description}
 Zwar unterscheiden sich die drei aufgeführten Ausgangssituationen im Endprodukt nicht zwangsläufig. In der Entwicklung des Microservices muss aber grundlegend anders vorgegangen werden. 
 
-Im ersten Fall kann der neue Anwendungsteil nach idealen und neuen Vorstellungen entwickelt werden. Zwar muss auch hier eine Integration zum bestehenden Code geschaffen werden, es gibt aber keine bisherige Implementation die beachtet werden muss. Die Entwickler haben die freie Wahl, die bestmögliche Integrationsform zu wählen.
+Der erste und zweite Fall unterscheiden sich nicht grundlegend. Die bestehende Schnittstelle zur betroffenen Funktion muss komplett überarbeitet werden. Sowohl in der bestehenden, als auch in der neu entstehenden Anwendung muss diese Schnittstelle geschaffen werden. Auch wenn nur existierender Code verschoben wird, muss eine komplett neue Schnittstelle geschaffen werden. Wo vorher code calls genutzt wurden, werden nun API calls genutzt.
+Welches dieser zwei Vorgehensweisen mit mehr Aufwand verbunden ist, hängt zum Großteil von der Komplexität und Struktur der bestehenden Anwendung ab. Auch wie modular der bereits existierende Code ist, ist entscheidend. Je nach Alter des bestehenden Codes ist eine Neuentwicklung teils ratsam. Da die Umarbeitung ohnehin mit erheblichem Arbeitsaufwand verbunden ist, bietet sich eine Optimierung des bestehenden Codes häufig an. Bei großen, komplexen Legacy Anwendungen ist dies in der Praxis aber häufig nicht ratsam.
+Bei der Aufsplittung des Monolithen bietet es sich hierbei an, sich am Saum (seams ~\footcite[vgl.][Seite 29 ff.]{feathers2004working}) orientiert werden. Codeteile, die isoliert sind und ohne Seiteneffekte geändert werden können, eignen sich besonders gut um in separate Services verschoben zu werden. Natürlich ist es alles eine Frage der konkreten Problematik, ob ein Service frei, neu gewählt werden kann oder aus Notwendigkeit, unabhängig vom Grad der Komplexität, geschaffen werden muss.
 
-Der zweite und dritte Fall unterscheiden sich nicht grundlegend. Die bestehende Schnittstelle zur betroffenen Funktion muss komplett überarbeitet werden. Sowohl in der bestehenden, als auch in der neu entstehenden Anwendung muss diese Schnittstelle geschaffen werden. Auch wenn nur existierender Code verschoben wird muss in der Regel eine komplett neue Schnittstelle geschaffen werden. Wo vorher code calls genutzt wurden, werden nun API calls genutzt. 
-Je nach Komplexität und Struktur der Anwendung kann der zweite oder der dritte Fall in der Umsetzung schwieriger sein. Je nach Alter des bestehenden Codes ist eine Neuentwicklung teils ratsam. Da die Umarbeitung ohnehin mit erheblichem Arbeitsaufwand verbunden ist, bietet sich eine Optimierung des bestehenden Codes häufig an. Bei großen, komplexen Legacy Anwendungen ist dies in der Praxis aber häufig nicht ratsam.
+Im dritten Fall kann der neue Anwendungsteil nach idealen und neuen Vorstellungen entwickelt werden. Zwar muss auch hier eine Integration zum bestehenden Code geschaffen werden, es gibt aber keine bisherige Implementation die beachtet werden muss. Die Entwickler haben die freie Wahl, die bestmögliche Integrationsform zu wählen. Dies kann häufig zum besten Endprodukt führen, da keine Einschränkungen durch bestehenden Legacy Code die Programmierung beeinträchtigen. Natürlich wird hier aber ein komplett neues Feature entwickelt. Die Konzeption der Architektur, des Codes und die komplett neue Entwicklung können hier mit einem wesentlichen Mehraufwand verbunden sein. Die Integration in die bestehende Anwendung sollte aber in der Regel mit weniger Problemen verbunden sein.
