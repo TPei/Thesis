@@ -1,6 +1,6 @@
 \chapter{Implementierung aufbauend auf bestehenden Technologien, REST API und Continuous Delivery}
 
-\section{Ruby / Sinatra als schlanke Ergänzung des bestehenden Technologiestacks}
+\section{Sinatra und PostgreSQL zur Optimiertung des bestehenden Technologiestacks}
 Wie bereits in vorangegangenen Kapiteln beschrieben, bieten Microservices die Möglichkeit zum optimierten Einsatz von Technologien. Für die zu entwickelnde Anwendung gab es diverse Optimierungsmöglichkeiten. Die Hauptanwendung ist im Ruby Framework Ruby on Rails\footnote{http://rubyonrails.org} entwickelt worden. Ruby on Rails ist jedoch als Framework zu heavy-weight und mit zu viel Overhead verbunden, als das es sich für einen schnellen, minimalistischen Microservice eignen würde. Ruby on Rails ist an erster Stelle für monolithische Anwendungen entwickelt.~\footcite[][]{rails:doctrine}
 Hierbei ist nicht nur die Performance entscheident, sondern auch die Struktur des Codes. Rails als traditionelles Model-View-Controller Framework\footcite[][]{wiki:mvc} eignet sich somit vor Allem auch nicht aufgrund seiner Struktur. Die Rails API Variante\footnote{https://github.com/rails/rails/pull/19832} hingegen hat immer noch zu viel overead für eine optimierte Schnittstelle.
 
@@ -34,7 +34,7 @@ Die Schemalosigkeit von MongoDB in Zusammenarbeit mit den recht variablen Profil
     slides: [
         {
             slideId: 1,
-            slideNo: 1,
+            slideOrder: 1,
             elements: [
                 {
                     elementId: 1,
@@ -50,7 +50,7 @@ Die Schemalosigkeit von MongoDB in Zusammenarbeit mit den recht variablen Profil
 }
 \end{lstlisting}
 Eine Präsentation kann nun mit nur einer Abfrage, ohne jegliche Joins aus der Datenbank geladen werden. Die ganze Präsentation kann vorgerendered werden und die Anwendung zur Erstellung oder Präsentation von Präsentationen ohne weiteres Nachladen genutzt werden. Hier liegt MongoDB's Stärke: Strukturen können in ihrer natürlichen Form abgebildet werden und dokumentorientiert schnell aus der Datenbank geladen werden.
-So ist auch der Aufbau der Profile konzipiert worden. Nun kommt es aber verhältnismäßig selten vor, dass ein gesamtes Userprofil geladen werden muss. Dies ist nur der Fall, wenn User ihr Profil anpasse wollen.
+So ist auch der Aufbau der Profile konzipiert worden. Nun kommt es aber verhältnismäßig selten vor, dass ein gesamtes Userprofil geladen werden muss. Dies ist nur der Fall, wenn User ihr Profil anpassen wollen.
 Wesentlich öfter hingegen werden Userprofile abgefragt um User zu Umfragen einzludaen. Hier interessiert aber nie ein ganzer Nutzer, sondern lediglich ein Querschnitt über alle Nutzer. Queries sehen in der Regel wie folgt aus:
 \begin{lstlisting}[language=Ruby]
 {
@@ -69,19 +69,13 @@ Wesentlich öfter hingegen werden Userprofile abgefragt um User zu Umfragen einz
 
 Hier wird auf eine verhältnismäßig geringe Zahl von Profilfelder, meist weniger als 10, über die gesamte Population gequeried. Weiterhin werden dann nicht gesamte Nutzerobjekte zurückgegeben, sondern lediglich die Anzahl der passenden Nutzer, deren Ids oder Antwortraten. Die MongoDB query Struktur ist dafür einfach nicht optimiert. Hinzu kommt die extreme Verschachtelung der Datenstruktur. So werden nicht nur Profildaten wie Kinder in ein Subdokument gruppiert, es gibt auch noch thematische Unterteilungen der Profildaten, ``basic'' für die allgemeinen personenbezogenen Daten, ``basic.education'' für Daten über den Bildungsgrad.
 Hinzu kommt die relative Größe der Datenbank. Knapp 400.000 Userdaten mit bis zu 176 ausgefüllten Prodfilfeldern passen aktuell nicht einmal mehr in den Arbeitsspeicher der Server. Nicht alle Felder können logischerweise mit Indexen abgedeckt werden, die relative Verteilung der Queries umfasst aber alle Felder. Zwar gibt es besondere Häufungen der Queries bei bestimmten Feldern und diese sind auch durch Indexes abgedeckt, vor Allem aber die Queries auf die anderen Felder verlangsamen die Anwendung nicht unerheblich.
+Aufgrund der offensichtlichen Mängel bot es sich an, die Datenbanktechnologie zu wechseln und stattdessen eine SQL Datenbank zu verwenden. Im Gegensatz zum Wechsel der Programmiersprache, stellt der Einsatz einer anderen Datenbanktechnologie im konkreten Fall keine große Hürde dar. Im Betrieb besteht bereits eine MySQL\footnote{http://www.mysql.com} Datenbank als Data Warehouse und eine PostgreSQL\footnote{http://www.postgresql.org} Datenbank für eine für einen Kunden betriebene Anwendung. Daher besteht Erfahrung sowohl in der Entwicklung mit, als auch dem Betrieb von SQL Datenbanken.
+
+Testing, Git, CI, Deployment!?
 
 \section{Schaffung einer standardisierten REST Schnittstelle}
+Einen entscheidenen Unterschied zwischen Microservice Architektur und monolithischer Entwicklung, bildet die Schnittstelle zwischen den Anwendungsteilen. Während im monolithen code calls... remote calls... 
 
-\section{Optimierung des Lesezugriffs auf die bestehenden Daten}
-
-\section{Mit Testing, Continuous Integration und Cloud Hosting zu Continuous Delivery}
+\section{Integration des Microservices in den Monolithen}
 
 \section{Betrieb der Anwendung auf AWS - Betreuung, Monitoring und Scaling}
-
-
-(FIX IDEEN FÜR KAPITELUMSTRUKTURIERUNG)
-
-Sinatra und PostgreSQL zur Optimiertung des bestehenden Technologiestacks
-Schaffung einer standardisierten REST Schnittstelle
-Integration des Microservices mit dem Monolithen
-Betrieb der Anwendung auf AWS - Betreuung, Monitoring, Scaling
