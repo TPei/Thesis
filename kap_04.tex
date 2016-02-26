@@ -1,7 +1,12 @@
 \chapter{Implementierung aufbauend auf bestehenden Technologien, REST API und Continuous Delivery}
 
 \section{Ruby / Sinatra als schlanke Ergänzung des bestehenden Technologiestacks}
-Rails ist zu heavy-weight, an erster Stelle für monolithische Anwendungen entwickelt~\footcite[][]{rails:doctrine} und mit zu viel overhead verbunden.
+Wie bereits in vorangegangenen Kapiteln beschrieben, bieten Microservices die Möglichkeit zum optimierten Einsatz von Technologien. Für die zu entwickelnde Anwendung gab es diverse Optimierungsmöglichkeiten. Die Hauptanwendung ist im Ruby Framework Ruby on Rails\footnote{http://rubyonrails.org} entwickelt worden. Ruby on Rails ist jedoch als Framework zu heavy-weight und mit zu viel Overhead verbunden, als das es sich für einen schnellen, minimalistischen Microservice eignen würde. Ruby on Rails ist an erster Stelle für monolithische Anwendungen entwickelt.~\footcite[][]{rails:doctrine}
+Hierbei ist nicht nur die Performance entscheident, sondern auch die Struktur des Codes. Rails als traditionelles Model-View-Controller Framework\footcite[][]{wiki:mvc} eignet sich somit vor Allem auch nicht aufgrund seiner Struktur. Die Rails API Variante\footnote{https://github.com/rails/rails/pull/19832} hingegen hat immer noch zu viel overead für eine optimierte Schnittstelle.
+
+Alternativen bilden sogenannte Microframeworks\footcite[][]{wiki:micro}. Microframeworks zeichnen sich im Gegensatz zu full-stack Frameworks dadurch aus, das viele der Funktionen nicht Teil des mitgelieferten Umfangs sind. In den meisten Sprachen gibt es diverse Microframeworks, wie z.B. Flask\footnote{http://flask.pocoo.org} für Python, Express\footnote{http://expressjs.com} für Node, Sparkjava\footnote{http://sparkjava.com}, oder das Sinatra Framework\footnote{http://www.sinatrarb.com} für Ruby. Die Sprache Go\footnote{https://golang.org} kommt bereits mit gut ausgebauten net/htttp Paketen und umfasst dadurch die meisten üblichen Funktionen schon ohne Framework.
+
+Zwar gibt es Geschwindigkeitsunterschiede in diesen Frameworks\footcite[vgl.][]{frameworks}, im Vergleich zu klassischen full-stack Frameworks sind diese aber unerheblich. Da die Datenbank in der bestehenden Anwendung den größten Flaschenhals bildet (FIX STATS), muss hier nicht zwangsläufig das beste Framework gewählt werden. Stattdessen sollte auf die bestehende Firmenstruktur geachtet werden.
 
 \section{Schaffung einer standardisierten REST Schnittstelle}
 
@@ -10,3 +15,11 @@ Rails ist zu heavy-weight, an erster Stelle für monolithische Anwendungen entwi
 \section{Mit Testing, Continuous Integration und Cloud Hosting zu Continuous Delivery}
 
 \section{Betrieb der Anwendung auf AWS - Betreuung, Monitoring und Scaling}
+
+
+(FIX IDEEN FÜR KAPITELUMSTRUKTURIERUNG)
+
+Sinatra und PostgreSQL zur Optimiertung des bestehenden Technologiestacks
+Schaffung einer standardisierten REST Schnittstelle
+Integration des Microservices mit dem Monolithen
+Betrieb der Anwendung auf AWS - Betreuung, Monitoring, Scaling
