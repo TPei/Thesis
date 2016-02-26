@@ -6,7 +6,23 @@ Hierbei ist nicht nur die Performance entscheident, sondern auch die Struktur de
 
 Alternativen bilden sogenannte Microframeworks\footcite[][]{wiki:micro}. Microframeworks zeichnen sich im Gegensatz zu full-stack Frameworks dadurch aus, das viele der Funktionen nicht Teil des mitgelieferten Umfangs sind. In den meisten Sprachen gibt es diverse Microframeworks, wie z.B. Flask\footnote{http://flask.pocoo.org} für Python, Express\footnote{http://expressjs.com} für Node, Sparkjava\footnote{http://sparkjava.com}, oder das Sinatra Framework\footnote{http://www.sinatrarb.com} für Ruby. Die Sprache Go\footnote{https://golang.org} kommt bereits mit gut ausgebauten net/htttp Paketen und umfasst dadurch die meisten üblichen Funktionen schon ohne Framework.
 
-Zwar gibt es Geschwindigkeitsunterschiede in diesen Frameworks\footcite[vgl.][]{frameworks}, im Vergleich zu klassischen full-stack Frameworks sind diese aber unerheblich. Da die Datenbank in der bestehenden Anwendung den größten Flaschenhals bildet (FIX STATS), muss hier nicht zwangsläufig das beste Framework gewählt werden. Stattdessen sollte auf die bestehende Firmenstruktur geachtet werden.
+Zwar gibt es Geschwindigkeitsunterschiede in diesen Frameworks\footcite[vgl.][]{frameworks}, im Vergleich zu klassischen full-stack Frameworks sind diese aber unerheblich. Da die Datenbank in der bestehenden Anwendung den größten Flaschenhals bildet (FIX STATS), muss hier nicht zwangsläufig das beste Framework gewählt werden. Stattdessen sollte auf die bestehende Firmenstruktur geachtet werden. Da fast die gesamte Backendtechnologie bisher mit der Programmiersprache Ruby entwickelt ist und es somit keine anderen im Produktionsmodus (FIX IN PRODUCTION) eingesetzt wird, stellt es eine Schwierigkeit dar, eine neue Programmiersprache in die Firma zu integrieren. Vor allem da der neue Microservice auch mit einem komplett eigenen Produktionssetup verbunden ist, stellt eine in der Firma bisher unbekannte Programmiersprache eine ganz eigene Herausforderung dar. Um die Wartbarkeit des Systems hoch zu halten und die Risiken für den Betrieb zu minimieren, entschied ich mich daher auch im neuen Microservice die Programmiersprache Ruby einzusetzen. Da das Framework Ruby on Rails überproprtioniert ist und nicht den Anforderungen entspricht, entschied ich mich für den Einsatz des Ruby Frameworks Sinatra. 
+Sinatra ist nach Ruby on Rails das mit Abstand beliebteste Ruby Framework\footcite[vgl.][]{ruby2015} und wird daher von den meisten Ruby Web Tools unterstützt.
+
+Wie bereits erwähnt, ist Sinatra ein sogenanntes Microframework. Sinatra selbst bringt also nicht viel Logik, die die Entwicklung beeinflusst. Einige Dinge die Sintra erleichtert, sind vor Allem das Routing. Hier kann schnell eine Routing Struktur erschaffen werden, die Definition von Routen und deren Antworten ist sehr komfortabel und schnell eingerichtet. Sinatra ist vor Allem auch nicht darauf ausgelegt in Antworten HTML zu rendern, so kann leicht eine JSON Response definiert werden.
+Eine Route zum Anlegen von Resourcen kann demnach so definiert werden:
+\begin{lstlisting}[language=Ruby]
+class SomeController < Sinatra::Base
+  post '/resources' do
+    data = JSON.load(request.body.read)
+    [...] # some actions to save the resource
+    # return appropriate 201 code and json with access key
+    [201, { data: { key: some_key  } }.to_json }]
+  end
+end
+\end{lstlisting}
+
+Weiterhin erleichtert Sinatra das Betreiben eines Webservers und bietet eine Schnittstelle zum Ruby Standard Webserver Interface Rack\footnote{http://rack.github.io}. Hier wird dem Entwickler viel Arbeit abgenommen. Viele Tools zum Betreiben von Webservices, z.B. im Bereich des Monitorings oder des Loggings unterstützen ebenfalls das Sinatra Framework. So bringt Sinatra also nicht viel overhead out of the box, bringt aber die Möglichkeit zur Nutzung vieler praktischer Erweiterungen.
 
 \section{Schaffung einer standardisierten REST Schnittstelle}
 
