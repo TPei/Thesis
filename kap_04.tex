@@ -77,5 +77,24 @@ Testing, Git, CI, Deployment!?
 Einen entscheidenen Unterschied zwischen Microservice Architektur und monolithischer Entwicklung, bildet die Schnittstelle zwischen den Anwendungsteilen. Während im Monolithen simple code calls stattfinden, muss für die Kommunikation zwischen verschiedenen Servies zunächst ein geeignetes Protokoll zum Austausch gefunden werden.
 
 \section{Integration des Microservices in den Monolithen}
+Wie bereits im vorangegangenen Kapitel beschrieben, beschloss ich mich die neue Microservice Anwendung mit Hilfe des Flipper Gems parallel zu betreiben. Anhand der abstrahierten Schnittstelle des QueryExecuters, wird entschieden ob ein Query auf der alten Datenbank oder dem neuen Service stattfindet.
+\begin{figure}[h]
+    \centering
+    \caption{Klassendiagramm zur Verteilung zwischen bestehendem und neu geschaffenem Code}
+    \includegraphics[scale=0.6]{klassendiagramm}
+\end{figure}
+
+Ist der Flipper aktiviert, wird zunächst ein per POST ein Query an den Service übertragen. Im Hintergrund initiiert der Service dann ein parsen, übersetzen und abarbeiten der Query, dies geschieht asynchron. Zunächst wird die Query in Redis gespeichert und der generierte Zugriffsschlüssel zurückgegeben.
+Anhand dieses Schlüssels kann die Hauptanwendung dann die freigegebenen Ergebnisse des Querys, wie die Ids der zutreffenden User, abfragen. Der Ablauf kann wie folgt visualisiert werden:
+
+\begin{figure}[h]
+    \centering
+    \caption{Sequenzdiagramm zum Profilqueryen bei aktiviertem Flipper}
+    \includegraphics[width=\textwidth]{prophet_sequenz}
+\end{figure}
 
 \section{Betrieb der Anwendung auf AWS - Betreuung, Monitoring und Scaling}
+Wie bereits beschrieben, bilden die Skalierungsmöglichkeiten von Microservices einen großen Vorteil des Architekturstils. Um diesen optimal ausnutzen zu können, bietet es sich an ein dynamisches Hosting einzurichten. Hier gibt diverse Lösungen, die alle einen ähnlichen Funktionsumfang bieten. Zu nennen sind hier insbesondere Amazon Web Services (AWS), Google App Engine und Heroku. Da die AWS eine der reifesten Platformen ist, beschloss ich für den Microservice AWS als Hoster zu wählen.
+Auf AWS nutze ich Amazon Beanstalk zum Betreiben der Anwendung. Beanstalk nutzt intern EC2 Instanzen, baut aber eine eigene Konfigurationsschicht darauf auf. Daher muss keine gesamte virtuelle Maschine betrieben werden, sondern die Anwendung kann leicht über ein Konfigurationsinterface gesteuert werden. (FIX BILD??)
+AWS Beanstalk ist selbst mit keinen Kosten verbunden, man bezahlt nur für die von Beanstalk genutzten Resourcen, also die genutzten EC2 Instanzen und der reine Speicherverbrauch der Anwendung auf AWS S3. Die weiteren von der Anwendung benötigten Resourcen sind zum Einen eine PostgreSQL Datenbank und der Key-Value Store Redis. Hierfür bietet Amazon jeweils gesonderte Service zum Betrieb. Relationale Datenbanken können über den Amazon Relational Database Service (RDS) genutzt werden, Redis wird über Amazon ElastiCache angeboten. Beide Services bieten ebenso wie Beanstalk gute Skalierungsmöglichkeiten.
+Entscheidend ist ebenfalls das Monitoring. Skylight und Bugsnag als Integration in bestehende Firmenteile.
