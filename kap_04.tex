@@ -94,7 +94,7 @@ Anhand dieses Schlüssels kann die Hauptanwendung dann die freigegebenen Ergebni
 \end{figure}
 
 \section{Betrieb der Anwendung auf AWS - Betreuung, Monitoring und Scaling}
-Wie bereits beschrieben, bilden die Skalierungsmöglichkeiten von Microservices einen großen Vorteil des Architekturstils. Um diesen optimal ausnutzen zu können, bietet es sich an ein dynamisches Hosting einzurichten. Hier gibt diverse Lösungen, die alle einen ähnlichen Funktionsumfang bieten. Zu nennen sind hier insbesondere Amazon Web Services (AWS)\footnote{https://aws.amazon.com/}, Google App Engine\footnote{https://cloud.google.com/appengine/} und Heroku\footnote{https://heroku.com/}. Da die AWS eine der reifesten Platformen ist, beschloss ich für den Microservice AWS als Hoster zu wählen.
+Wie bereits beschrieben, bilden die Skalierungsmöglichkeiten von Microservices einen großen Vorteil des Architekturstils. Um diesen optimal ausnutzen zu können, bietet es sich an ein dynamisches Hosting einzurichten. Hier gibt diverse Lösungen, die alle einen ähnlichen Funktionsumfang bieten. Zu nennen sind hier insbesondere Amazon Web Services (AWS)\footnote{https://aws.amazon.com/}, Google App Engine\footnote{https://cloud.google.com/appengine/} und Heroku\footnote{https://heroku.com/}. Da die AWS eine der reifsten Platformen ist, beschloss ich für den Microservice AWS als Hoster zu wählen.
 Auf AWS nutze ich Amazon Beanstalk zum Betreiben der Anwendung. Beanstalk nutzt intern EC2 Instanzen, baut aber eine eigene Konfigurationsschicht darauf auf. Daher muss keine gesamte virtuelle Maschine betrieben werden, sondern die Anwendung kann leicht über ein Konfigurationsinterface gesteuert werden.
 
 \begin{figure}[h]
