@@ -95,6 +95,12 @@ Anhand dieses Schlüssels kann die Hauptanwendung dann die freigegebenen Ergebni
 
 \section{Betrieb der Anwendung auf AWS - Betreuung, Monitoring und Scaling}
 Wie bereits beschrieben, bilden die Skalierungsmöglichkeiten von Microservices einen großen Vorteil des Architekturstils. Um diesen optimal ausnutzen zu können, bietet es sich an ein dynamisches Hosting einzurichten. Hier gibt diverse Lösungen, die alle einen ähnlichen Funktionsumfang bieten. Zu nennen sind hier insbesondere Amazon Web Services (AWS)\footnote{https://aws.amazon.com/}, Google App Engine\footnote{https://cloud.google.com/appengine/} und Heroku\footnote{https://heroku.com/}. Da die AWS eine der reifesten Platformen ist, beschloss ich für den Microservice AWS als Hoster zu wählen.
-Auf AWS nutze ich Amazon Beanstalk zum Betreiben der Anwendung. Beanstalk nutzt intern EC2 Instanzen, baut aber eine eigene Konfigurationsschicht darauf auf. Daher muss keine gesamte virtuelle Maschine betrieben werden, sondern die Anwendung kann leicht über ein Konfigurationsinterface gesteuert werden. (FIX BILD??)
-AWS Beanstalk ist selbst mit keinen Kosten verbunden, man bezahlt nur für die von Beanstalk genutzten Resourcen, also die genutzten EC2 Instanzen und der reine Speicherverbrauch der Anwendung auf AWS S3. Die weiteren von der Anwendung benötigten Resourcen sind zum Einen eine PostgreSQL Datenbank und der Key-Value Store Redis. Hierfür bietet Amazon jeweils gesonderte Services zum Betrieb. Relationale Datenbanken können über den Amazon Relational Database Service (RDS) genutzt werden, Redis wird über Amazon ElastiCache angeboten. Beide Services bieten ebenso wie Beanstalk gute Skalierungsmöglichkeiten.
+Auf AWS nutze ich Amazon Beanstalk zum Betreiben der Anwendung. Beanstalk nutzt intern EC2 Instanzen, baut aber eine eigene Konfigurationsschicht darauf auf. Daher muss keine gesamte virtuelle Maschine betrieben werden, sondern die Anwendung kann leicht über ein Konfigurationsinterface gesteuert werden.
+
+\begin{figure}[h]
+    \centering
+    \caption{AWS Beanstalk Konfigurationsinterface}
+    \includegraphics[width=\textwidth]{aws_config_ui}
+\end{figure}
+AWS Beanstalk ist selbst mit keinen Kosten verbunden, die Kosten ergeben sich nur aus den von Beanstalk genutzten Resourcen, also die genutzten EC2 Instanzen und der reine Speicherverbrauch der Anwendung auf AWS S3. Die weiteren von der Anwendung benötigten Resourcen sind zum Einen eine PostgreSQL Datenbank und der Key-Value Store Redis. Hierfür bietet Amazon jeweils gesonderte Services zum Betrieb. Relationale Datenbanken können über den Amazon Relational Database Service (RDS) genutzt werden, Redis wird über Amazon ElastiCache angeboten. Beide Services bieten ebenso wie Beanstalk gute Skalierungsmöglichkeiten.
 Entscheidend ist ebenfalls das Monitoring. Skylight und Bugsnag als Integration in bestehende Firmenteile.
