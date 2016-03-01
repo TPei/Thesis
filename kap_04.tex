@@ -24,6 +24,10 @@ end
 
 Weiterhin erleichtert Sinatra das Betreiben eines Webservers und bietet eine Schnittstelle zum Ruby Standard Webserver Interface Rack\footnote{http://rack.github.io}. Hier wird dem Entwickler viel Arbeit abgenommen. Viele Tools zum Betreiben von Webservices, z.B. im Bereich des Monitorings oder des Loggings unterstützen ebenfalls das Sinatra Framework. So bringt Sinatra also nicht viel overhead out of the box, bringt aber die Möglichkeit zur Nutzung vieler praktischer Erweiterungen.
 
+Als Webserver wählte ich den Ruby Webserver Puma\footnote{http://puma.io/}. Puma ist ein Webserver mit verhältnismäßig geringem Speicherverbrauch, dadurch bietet er sich vor Allem für den Betrieb eines Microservices an.
+
+(FIX Webserver? Puma... hier oder später?)
+
 Da die Datenbank das scheinbar größte Problem der Performance in der bestehenden Anwendung bildet, ist es hier dringend notwendig die eingesetzte Technologie zu überdenken. Zwar ist MongoDB von der Idee her keine schlechte Wahl für die Userprofile, die Art wie Profildaten abgefragt werden, passt aber nicht gut zum dokumentorientierten Ansatz von MongoDB.
 Die Schemalosigkeit von MongoDB in Zusammenarbeit mit den recht variablen Profilen war ursprünglich der Hauptgrund diese Technologie einzusetzen. Userprofile sind startk unterschiedlich, viele mit ja beantworteten Fragen führen zu weiteren Fragen (z.B. ``Haben Sie Kinder?'', ``Wie viele Kinder haben Sie?'', ``Wie alt ist Kind x?''). Hierbei bietet es sich durchaus an MongoDB mit seiner Embedded Document Struktur zu benutzten, statt unzählige 1 zu n Beziehungen zu verwalten. Die Art der Abfrage ist aber für die Geschwindigkeit unterscheident. Hier verspricht die Struktur von MongoDB Geschwindigkeitsvorteile, wenn man einzelne Dokumente aus der Datenbank erhalten möchte. So kann zum Beispiel die Struktur einer Powerpoint Struktur wie folgt abgebildet werden.
 \begin{lstlisting}[language=Ruby]
@@ -71,11 +75,17 @@ Hier wird auf eine verhältnismäßig geringe Zahl von Profilfelder, meist wenig
 Hinzu kommt die relative Größe der Datenbank. Knapp 400.000 Userdaten mit bis zu 176 ausgefüllten Prodfilfeldern passen aktuell nicht einmal mehr in den Arbeitsspeicher der Server. Nicht alle Felder können logischerweise mit Indexen abgedeckt werden, die relative Verteilung der Queries umfasst aber alle Felder. Zwar gibt es besondere Häufungen der Queries bei bestimmten Feldern und diese sind auch durch Indexes abgedeckt, vor Allem aber die Queries auf die anderen Felder verlangsamen die Anwendung nicht unerheblich.
 Aufgrund der offensichtlichen Mängel bot es sich an, die Datenbanktechnologie zu wechseln und stattdessen eine SQL Datenbank zu verwenden. Im Gegensatz zum Wechsel der Programmiersprache, stellt der Einsatz einer anderen Datenbanktechnologie im konkreten Fall keine große Hürde dar. Im Betrieb besteht bereits eine MySQL\footnote{http://www.mysql.com} Datenbank als Data Warehouse und eine PostgreSQL\footnote{http://www.postgresql.org} Datenbank für eine für einen Kunden betriebene Anwendung. Daher besteht Erfahrung sowohl in der Entwicklung mit, als auch dem Betrieb von SQL Datenbanken.
 Während der Entwicklung der Anwendung entwickelte ich durchgehend testgetrieben. Da die entwickelte Funktionalität einen integralen Bestandteil der Gesamtanwendung bildet, ist es zwingend notwendig die Funktionalität zu gewährleisten. Um die Qualität der Anwendung zu gewährleisten setzte ich die gleichen Tools ein, die auch in der Hauptanwendung genutzt werden. Als Testframework ist dies RSpec\footnote{http://rspec.info/}. Zur Überprüfung der Code Konventionen wird der Static Code Analyzer RuboCop\footnote{https://github.com/bbatsov/rubocop} eingesetzt. Der Einsatz von RSpec und RuboCop wird sowohl lokal, als auch automatisiert im Continuous Integration System Circle CI\footnote{https://circleci.com} eingesetzt. Fehler der Erfüllung der Fehlerfreiheit bei RSpec und Rubocop führen jeweils zu fehlerhaften Tests. Im eingesetzten Git System Github\footnote{https://github.com} wird bei jedem gepushten Commit automatisch ein Upload zu Circle CI getriggered. Bei Fehlern wird der Branch in Github als rot, ansonsten als grün markiert. Dies ist zwingende Voraussetzung für die den Einsatz von Continuous Deployment.
-
 (FIX DEPLOYMENT/Continuous deployment??)
+(FIX Funktion?? Was passiert genau im Service? Hier? Wo??)
+(FIX Unterpunkte?)
+(FIX Testing - how to test Microservices?)
 
 \section{Schaffung einer standardisierten REST Schnittstelle}
 Einen entscheidenen Unterschied zwischen Microservice Architektur und monolithischer Entwicklung, bildet die Schnittstelle zwischen den Anwendungsteilen. Während im Monolithen simple code calls stattfinden, muss für die Kommunikation zwischen verschiedenen Servies zunächst ein geeignetes Protokoll zum Austausch gefunden werden.
+Da hier eben kein durch die Programmiersprache vorgeschriebener Standard besteht, ist es hier wichtig ein geeignetes Austauschformat zu definieren.
+Um Änderungen sowohl im Client, also auch im Service möglich zu machen, sollten keine sprachgebundenen Technologien eingesetzt werden. Somit kann sichergestellt werden, das möglichst geringe Änderungen anfallen, sollte ein neuer Client oder Änderungen am bestehenden System zum Einsatz einer neuen Programmiersprache führen.
+
+(FIX JSON SCHEMA, RAML, Link to RAML doku page, console)
 
 \section{Integration des Microservices in den Monolithen}
 Wie bereits im vorangegangenen Kapitel beschrieben, beschloss ich mich die neue Microservice Anwendung mit Hilfe des Flipper Gems parallel zu betreiben. Anhand der abstrahierten Schnittstelle des QueryExecuters, wird entschieden ob ein Query auf der alten Datenbank oder dem neuen Service stattfindet.
