@@ -88,28 +88,31 @@ Um Änderungen sowohl im Client, also auch im Service möglich zu machen, sollte
 (FIX JSON SCHEMA, RAML, Link to RAML doku page, console)
 
 \section{Integration des Microservices in den Monolithen}
-Wie bereits im vorangegangenen Kapitel beschrieben, beschloss ich mich die neue Microservice Anwendung mit Hilfe des Flipper Gems parallel zu betreiben. Anhand der abstrahierten Schnittstelle des QueryExecuters, wird entschieden ob ein Query auf der alten Datenbank oder dem neuen Service stattfindet.
-\begin{figure}[h]
+Wie bereits im vorangegangenen Kapitel beschrieben, beschloss ich mich die neue Microservice Anwendung mit Hilfe des Flipper Gems parallel zu betreiben. Anhand der abstrahierten Schnittstelle des QueryExecuters, wird entschieden ob ein Query auf der alten Datenbank oder dem neuen Service stattfindet. Das entsprechende Klassendiagramm ist in \autoref{fid:class} dargestell.
+\begin{figure}[!ht]
     \centering
+    \label{fig:class}
     \caption{Klassendiagramm zur Verteilung zwischen bestehendem und neu geschaffenem Code}
     \includegraphics[scale=0.6]{klassendiagramm}
 \end{figure}
 
 Ist der Flipper aktiviert, wird zunächst ein per POST ein Query an den Service übertragen. Im Hintergrund initiiert der Service dann ein parsen, übersetzen und abarbeiten der Query, dies geschieht asynchron. Zunächst wird die Query in Redis gespeichert und der generierte Zugriffsschlüssel zurückgegeben.
-Anhand dieses Schlüssels kann die Hauptanwendung dann die freigegebenen Ergebnisse des Querys, wie die Ids der zutreffenden User, abfragen. Der Ablauf kann wie folgt visualisiert werden:
+Anhand dieses Schlüssels kann die Hauptanwendung dann die freigegebenen Ergebnisse des Querys, wie die Ids der zutreffenden User, abfragen. Der Ablauf kann wie in \autoref{fig:sequenz} visualisiert werden.
 
-\begin{figure}[h]
+\begin{figure}[!ht]
     \centering
+    \label{fig:sequenz}
     \caption{Sequenzdiagramm zum Profilqueryen bei aktiviertem Flipper}
     \includegraphics[width=\textwidth]{prophet_sequenz}
 \end{figure}
 
 \section{Betrieb der Anwendung auf AWS - Betreuung, Monitoring und Scaling}
 Wie bereits beschrieben, bilden die Skalierungsmöglichkeiten von Microservices einen großen Vorteil des Architekturstils. Um diesen optimal ausnutzen zu können, bietet es sich an ein dynamisches Hosting einzurichten. Hier gibt diverse Lösungen, die alle einen ähnlichen Funktionsumfang bieten. Zu nennen sind hier insbesondere Amazon Web Services (AWS)\footnote{https://aws.amazon.com/}, Google App Engine\footnote{https://cloud.google.com/appengine/} und Heroku\footnote{https://heroku.com/}. Da die AWS eine der reifsten Platformen ist, beschloss ich für den Microservice AWS als Hoster zu wählen.
-Auf AWS nutze ich Amazon Beanstalk zum Betreiben der Anwendung. Beanstalk nutzt intern EC2 Instanzen, baut aber eine eigene Konfigurationsschicht darauf auf. Daher muss keine gesamte virtuelle Maschine betrieben werden, stattdessen kann die Anwendung leicht über ein Konfigurationsinterface gesteuert werden.
+Auf AWS nutze ich Amazon Beanstalk zum Betreiben der Anwendung. Beanstalk nutzt intern EC2 Instanzen, baut aber eine eigene Konfigurationsschicht darauf auf. Daher muss keine gesamte virtuelle Maschine betrieben werden, stattdessen kann die Anwendung leicht über ein Konfigurationsinterface, wie in \autoref{fig:awsui} dargestellt, gesteuert werden.
 
-\begin{figure}[h]
+\begin{figure}[!ht]
     \centering
+    \label{fig:awsui}
     \caption{AWS Beanstalk Konfigurationsinterface}
     \includegraphics[width=\textwidth]{aws_config_ui}
 \end{figure}
