@@ -88,11 +88,11 @@ Um Änderungen sowohl im Client, also auch im Service möglich zu machen, sollte
 (FIX JSON SCHEMA, RAML, Link to RAML doku page, console)
 
 \section{Integration des Microservices in den Monolithen}
-Wie bereits im vorangegangenen Kapitel beschrieben, beschloss ich mich die neue Microservice Anwendung mit Hilfe des Flipper Gems parallel zu betreiben. Anhand der abstrahierten Schnittstelle des QueryExecuters, wird entschieden ob ein Query auf der alten Datenbank oder dem neuen Service stattfindet. Das entsprechende Klassendiagramm ist in \autoref{fid:class} dargestell.
+Wie bereits im vorangegangenen Kapitel beschrieben, beschloss ich mich die neue Microservice Anwendung mit Hilfe des Flipper Gems parallel zu betreiben. Anhand der abstrahierten Schnittstelle des QueryExecuters, wird entschieden ob ein Query auf der alten Datenbank oder dem neuen Service stattfindet. Das entsprechende Klassendiagramm ist in \autoref{fig:class} dargestellt.
 \begin{figure}[!ht]
     \centering
-    \label{fig:class}
     \caption{Klassendiagramm zur Verteilung zwischen bestehendem und neu geschaffenem Code}
+    \label{fig:class}
     \includegraphics[scale=0.6]{klassendiagramm}
 \end{figure}
 
@@ -101,8 +101,8 @@ Anhand dieses Schlüssels kann die Hauptanwendung dann die freigegebenen Ergebni
 
 \begin{figure}[!ht]
     \centering
-    \label{fig:sequenz}
     \caption{Sequenzdiagramm zum Profilqueryen bei aktiviertem Flipper}
+    \label{fig:sequenz}
     \includegraphics[width=\textwidth]{prophet_sequenz}
 \end{figure}
 
@@ -112,8 +112,8 @@ Auf AWS nutze ich Amazon Beanstalk zum Betreiben der Anwendung. Beanstalk nutzt 
 
 \begin{figure}[!ht]
     \centering
-    \label{fig:awsui}
     \caption{AWS Beanstalk Konfigurationsinterface}
+    \label{fig:awsui}
     \includegraphics[width=\textwidth]{aws_config_ui}
 \end{figure}
 AWS Beanstalk ist selbst mit keinen Kosten verbunden, die Kosten ergeben sich ausschließlich aus den von Beanstalk genutzten Resourcen, also die genutzten EC2 Instanzen und der reine Speicherverbrauch der Anwendung auf AWS S3. Die weiteren von der Anwendung benötigten Resourcen sind zum Einen eine PostgreSQL Datenbank und der Key-Value Store Redis. Hierfür bietet Amazon jeweils gesonderte Services zum Betrieb. Relationale Datenbanken können über den Amazon Relational Database Service (RDS) genutzt werden, Redis wird über Amazon ElastiCache angeboten. Beide Services bieten ebenso wie Beanstalk gute Skalierungsmöglichkeiten.
