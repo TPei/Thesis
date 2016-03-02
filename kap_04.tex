@@ -115,7 +115,7 @@ Anhand dieses Schlüssels kann die Hauptanwendung dann die freigegebenen Ergebni
 \end{figure}
 
 \section{Betrieb der Anwendung auf AWS - Betreuung, Monitoring und Scaling}
-Wie bereits beschrieben, bilden die Skalierungsmöglichkeiten von Microservices einen großen Vorteil des Architekturstils. Um diesen optimal ausnutzen zu können, bietet es sich an ein dynamisches Hosting einzurichten. Hier gibt diverse Lösungen, die alle einen ähnlichen Funktionsumfang bieten. Zu nennen sind hier insbesondere Amazon Web Services (AWS)\footnote{https://aws.amazon.com/}, Google App Engine\footnote{https://cloud.google.com/appengine/} und Heroku\footnote{https://heroku.com/}. Da die AWS eine der reifsten Platformen ist, beschloss ich für den Microservice AWS als Hoster zu wählen.
+Wie bereits beschrieben, bilden die Skalierungsmöglichkeiten von Microservices einen großen Vorteil des Architekturstils. Um diesen optimal ausnutzen zu können, bietet es sich an ein dynamisches Hosting einzurichten. Hier gibt diverse Lösungen, die alle einen ähnlichen Funktionsumfang bieten. Zu nennen sind hier insbesondere Amazon Web Services (AWS)\footnote{https://aws.amazon.com/}, Google App Engine\footnote{https://cloud.google.com/appengine/} und Heroku\footnote{https://heroku.com/}. Da AWS eine der reifsten Platformen ist und ich mit ihr bereits Erfahrunden sammeln konnte, beschloss ich für den Microservice AWS als Hoster zu wählen.
 Auf AWS nutze ich Amazon Beanstalk zum Betreiben der Anwendung. Beanstalk nutzt intern EC2 Instanzen, baut aber eine eigene Konfigurationsschicht darauf auf. Daher muss keine gesamte virtuelle Maschine betrieben werden, stattdessen kann die Anwendung leicht über ein Konfigurationsinterface, wie in \autoref{fig:awsui} dargestellt, gesteuert werden.
 
 \begin{figure}[!ht]
@@ -133,4 +133,10 @@ AWS Beanstalk ist selbst mit keinen Kosten verbunden, die Kosten ergeben sich au
     \includegraphics[width=\textwidth]{deploymentdiagram}
 \end{figure}
 
-Entscheidend ist ebenfalls das Monitoring. Skylight und Bugsnag als Integration in bestehende Firmenteile.
+Besonders wichtig für die Microservice Architektur ist das Monitoring der Anwendung und des Servers. Hier nute ich zum Einen Amazons eigene Monitoring Solutions die über den Health Status der Anwendung informiert. Wechselt die Anwendung vom Gesundheitsstatus "OK" in einen anderen, werden die Entwickler direkt über eine Email informiert.
+
+Zusätzlich zum allgemeinen Ausfallmonitoring durch Amazon, integrierte ich das Monitoring Tool Skylight in die Anwendung. Im bisherigen Betriebssetup wird aktuell NewRelic zum Monitoring eingesetzt. Skylight zeichnet sich jedoch durch einen besonders geringen Overhead aus, was sich beim Microservice durchaus anbietet. Skylight informiert ebenfalls per Email über Ausfälle und zeichnet allgemein die Performance des Systems auf. So kann zu jedem Zeitpunkt der Vergangenheit, über Wochen hinweg, detailliert die Performance des Sytsems nachvollzogen werden. Zusätzlich zu allgemeinen Aufzeichnungen der Response time, kann hier nach Datenbankabfragen unterschieden werden. So wird schnell deutlich, welche Anfragen besonders zeitintensiv sind und wo Handlungsbedarf oder Verbesserungsmöglichkeiten bestehen. 
+
+Als Fehlerreporting Tool kommt im Microservice Bugsnag zum Einsatz. Bugsnag wird bereits als primäres Firmentool verwendet und eignet sich ebenfalls gut für kleine Anwendungen. Bugsnag zeichnet Fehler im System mit Stacktrace auf und informiert die Entwickler ebenfalls per Email.
+
+Das informieren über Fehler per Email ist im Betrieb ein durchaus üblicher Weg, daher eignet sich diese Integration auch für den neuen Service. Weiterhin besteht in der Firma ein Dashboard, was zwar nicht die Performance des Services an sich, aber die Gesamtperformance des Sampling Prozesses darstellt. So können Probleme durch eine ansteigende Schlange auf dem Dashboard leicht von den Entwicklern bemerkt werden. All dies sind im Live Betrieb erprobte Techniken und eignen sich dadurch sehr gut für die Ausweitung auf neue Services.
