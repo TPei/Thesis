@@ -100,7 +100,7 @@ User.where(:'profile.basic.locale.value' => 'de')
 
 \begin{lstlisting}[language=Ruby]
 User.where(:'profile.basic.locale.value' => 'de').selector.to_json
-=> { "profile.basic.locale.value": "de"}"
+=> { "profile.basic.locale.value": "de" }
 \end{lstlisting}
 
 \noindent So bildet das Übersetzen der übergebenen einen wesentlichen Teil des entwickelten Microservices. (FIX KOPPLUNG erklären und rechtfertigen)
@@ -116,11 +116,11 @@ User.where(
 => 
 {
     "profile.basic.locale.value": {
-        "$nin":["de","de-AT","de-CH"]
+        "$nin": ["de","de-AT","de-CH"]
     },
     "profile.automotive.car_amount.value": {
-        "$gt":3,
-        "$lte":10
+        "$gt": 3,
+        "$lte": 10
     }
 }
 \end{lstlisting}
