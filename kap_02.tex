@@ -96,12 +96,19 @@ https://meinservice.tld/api/v2/eineRoute
 \subsection{Skalierbarkeit}
 Ein weiterer interessanter Punkt zum Betrieb von Microservices, ist das Thema der Skalierbarkeit.
 Das ``Scale Cube''\footcite[][]{abbott2009art} Modell beschreibt die drei Dimensionsen der Anwendungsskalierbarkeit. Klassische Anwendungsskalierung geschieht vor allem auf der X-Achse, der horizontalen Duplikation\footcite[][]{abbott2009art}. Skaliert wird hier, indem eine Anwendung dupliziert wird. Ein Load Balancer verteilt dann, nach bestimmten Regeln, die ankommenden Requests auf verschiedene Server.~\footcite[vgl.][]{loadbalancing} 
+
+\begin{figure}[!ht]
+    \caption{Die Dimension des Skalierens (\cite{abbott2009art})}
+    \label{fig:threetier}
+    \includegraphics[width=\textwidth]{scale_cube}
+\end{figure}
+
 Die Skalierung monolithischer Anwendungen beschränkt sich in der Regel insbesondere auf dieses Load Balancing.~\footcite[vgl.][]{infaktuell} 
 Da die Anwendungsreplikationen funktional identisch sind, ist die verteilte Last  unabhängig von den einzelnen Anwendungsteilen. Diese können eine unterschiedliche Individuallast haben, dies kann jedoch über den Load Balancer nicht beachtet werden.
 
 Bei Microservices kann nun weiterhin auf der Y-Achse skaliert werden. Hier handelt es sich um eine funktionale Decomposition\footcite[][]{abbott2009art}. Anwendungen werden hier in verschiedene Services unterteilt. Jeder Service ist für eine bestimmte Funktion zuständig. So kann weitaus granulärer skaliert werden. erhält ein Teilsystem besonders viel Last, kann dieses beliebig skaliert werden. Die anderen Teilsysteme bleiben davon unberührt. Dies optimiert sowohl Leistung, als auch Kosten.
 
-Zusätzlich können sowohl monolithische Anwendungen, als auch Microservice auf der Z-Achse skaliert werden. Hier handelt es sich vor Allem um Datenpartionierung. So werden Datenbanksysteme oft gesharded (FIX QUELLE). Dieses Sharding trennt Daten die eigentlich zusammengehören. Anhand bestimmter Kriterien werden Rows einer Datenbank auf verschiedene Systeme verteilt. Diese Partitionen Bilden sogennante Shards und können z.B. auf verschiedene Datenabankserver verteilt werden.
+Zusätzlich können sowohl monolithische Anwendungen, als auch Microservice auf der Z-Achse skaliert werden. Hier handelt es sich vor Allem um Datenpartionierung. So werden Datenbanksysteme oft gesharded.\footcite[][]{microsoft:sharding} Dieses Sharding trennt Daten die eigentlich zusammengehören. Anhand bestimmter Kriterien werden Rows einer Datenbank auf verschiedene Systeme verteilt. Diese Partitionen Bilden sogennante Shards und können z.B. auf verschiedene Datenabankserver verteilt werden.
 
 \subsection{Entwicklungszeit}
 Zu guter Letzt sollte man die reine Entwicklungszeit betrachten. Zwar ist die separate Codebase im Nachhinein ggf. leichter zu verwalten, die initiale Entwicklung ist aber durchaus mit einem gewissen Mehraufwand verbunden. Die Wahl der optimalen Technologien ist mit Recherche verbunden, der Einsatz neue Technologien darüber hinaus mit einer Einarbeitungszeit. Das initiale Setup von Programmiersprache, Framework und Datenbank ist ein zusätzlicher Aufwand, der bei der Erweiterung einer bestehenden Codebase nicht anfällt. Hinzu kommt außerdem die Einrichtung des Deployments. Git, Continuous Integration / Deployment, Servereinrichtung, sowie das Monitoren und Warten der Server sind vor allem zum Beginn des Lebenszyklus eines neuen Microservices ein nicht unerheblicher Mehraufwand. Dies und andere Herausforderungen gegen die Potentiale der Microservice Architektur abzuwägen, muss im konkreten Einzelfall immer individuell geschehen.
