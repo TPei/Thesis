@@ -1,7 +1,10 @@
 \chapter{Implementierung aufbauend auf bestehenden Technologien, REST API und Continuous Delivery}
 
 \section{Sinatra und PostgreSQL zur Optimiertung des bestehenden Technologiestacks}
-Wie bereits in vorangegangenen Kapiteln beschrieben, bieten Microservices die Möglichkeit zum optimierten Einsatz von Technologien. Für die zu entwickelnde Anwendung gab es diverse Optimierungsmöglichkeiten. Die Hauptanwendung ist im Ruby Framework Ruby on Rails\footnote{http://rubyonrails.org} entwickelt worden. Ruby on Rails ist jedoch als Framework zu heavy-weight und mit zu viel Overhead verbunden, als das es sich für einen schnellen, minimalistischen Microservice eignen würde. Ruby on Rails ist an erster Stelle für monolithische Anwendungen entwickelt.~\footcite[][]{rails:doctrine}
+Wie bereits in vorangegangenen Kapiteln beschrieben, bieten Microservices die Möglichkeit zum optimierten Einsatz von Technologien. Für die zu entwickelnde Anwendung gab es diverse Optimierungsmöglichkeiten. Hier sollte zum Einen insbesondere auf die Wahl der Datenbanktechnologie, zum Anderen vor Allem auf die Wahl des Frameworks geachtet werden.
+
+\subsection{Wahl des Webframeworks}
+Die Hauptanwendung ist im Ruby Framework Ruby on Rails\footnote{http://rubyonrails.org} entwickelt worden. Ruby on Rails ist jedoch als Framework zu heavy-weight und mit zu viel Overhead verbunden, als das es sich für einen schnellen, minimalistischen Microservice eignen würde. Ruby on Rails ist an erster Stelle für monolithische Anwendungen entwickelt.~\footcite[][]{rails:doctrine}
 Hierbei ist nicht nur die Performance entscheident, sondern auch die Struktur des Codes. Rails als traditionelles Model-View-Controller Framework\footcite[][]{wiki:mvc} eignet sich somit vor Allem auch nicht aufgrund seiner Struktur. Die Rails API Variante\footnote{https://github.com/rails/rails/pull/19832} hingegen hat immer noch zu viel overead für eine optimierte Schnittstelle.
 
 Alternativen bilden sogenannte Microframeworks\footcite[][]{wiki:micro}. Microframeworks zeichnen sich im Gegensatz zu full-stack Frameworks dadurch aus, das viele der Funktionen nicht Teil des mitgelieferten Umfangs sind. In den meisten Sprachen gibt es diverse Microframeworks, wie z.B. Flask\footnote{http://flask.pocoo.org} für Python, Express\footnote{http://expressjs.com} für Node, Sparkjava\footnote{http://sparkjava.com}, oder das Sinatra Framework\footnote{http://www.sinatrarb.com} für Ruby. Die Sprache Go\footnote{https://golang.org} kommt bereits mit gut ausgebauten net/htttp Paketen und umfasst dadurch die meisten üblichen Funktionen schon ohne Framework.
@@ -28,6 +31,7 @@ Als Webserver wählte ich den Ruby Webserver Puma\footnote{http://puma.io/}. Pum
 
 (FIX Webserver? Puma... hier oder später?)
 
+\subsection{Datenbanktechnologie}
 Da die Datenbank das scheinbar größte Problem der Performance in der bestehenden Anwendung bildet, ist es hier dringend notwendig die eingesetzte Technologie zu überdenken. Zwar ist MongoDB von der Idee her keine schlechte Wahl für die Userprofile, die Art wie Profildaten abgefragt werden, passt aber nicht gut zum dokumentorientierten Ansatz von MongoDB.
 Die Schemalosigkeit von MongoDB in Zusammenarbeit mit den recht variablen Profilen war ursprünglich der Hauptgrund diese Technologie einzusetzen. Userprofile sind startk unterschiedlich, viele mit ja beantworteten Fragen führen zu weiteren Fragen (z.B. ``Haben Sie Kinder?'', ``Wie viele Kinder haben Sie?'', ``Wie alt ist Kind x?''). Hierbei bietet es sich durchaus an MongoDB mit seiner Embedded Document Struktur zu benutzten, statt unzählige 1 zu n Beziehungen zu verwalten. Die Art der Abfrage ist aber für die Geschwindigkeit entscheident. Hier verspricht die Struktur von MongoDB Geschwindigkeitsvorteile, wenn man einzelne Dokumente aus der Datenbank erhalten möchte. So kann zum Beispiel die Struktur einer Powerpoint Präsentation wie folgt abgebildet werden:
 \begin{lstlisting}[language=Ruby]
@@ -82,6 +86,8 @@ Damit es jedoch auch nicht zu Kollisionen in der Schlüsselerzeugung kommt, wurd
 $ t = 16^{32} = 3,4 * 10^{32} $
 Selbst nach einer Milliarde generierter Schlüssel ist die Wahrscheinlichkeit von Kollisionsfreiheit demnach noch bei über $99,9999999999999999998$\%. Dies ist eine ausreichend hohe Sicherheit für den Anwendungsfall, zumal die Daten meist nach mehr als einem Tag nicht mehr abgefragt werden.
 
+\subsection{Architektur des Microservices}
+(FIX IS THIS RELEVANT??)
 Während der Entwicklung der Anwendung entwickelte ich durchgehend testgetrieben. Da die entwickelte Funktionalität einen integralen Bestandteil der Gesamtanwendung bildet, ist es zwingend notwendig die Funktionalität zu gewährleisten. Um die Qualität der Anwendung zu gewährleisten setzte ich die gleichen Tools ein, die auch in der Hauptanwendung genutzt werden. Als Testframework ist dies RSpec\footnote{http://rspec.info/}. Zur Überprüfung der Code Konventionen wird der Static Code Analyzer RuboCop\footnote{https://github.com/bbatsov/rubocop} eingesetzt. Der Einsatz von RSpec und RuboCop wird sowohl lokal, als auch automatisiert im Continuous Integration System Circle CI\footnote{https://circleci.com} eingesetzt. Fehler der Erfüllung der Fehlerfreiheit bei RSpec und Rubocop führen jeweils zu fehlerhaften Tests. Im eingesetzten Git System Github\footnote{https://github.com} wird bei jedem gepushten Commit automatisch ein Upload zu Circle CI getriggered. Bei Fehlern wird der Branch in Github als rot, ansonsten als grün markiert. Dies ist zwingende Voraussetzung für die den Einsatz von Continuous Deployment.
 (FIX DEPLOYMENT/Continuous deployment??)
 (FIX Funktion?? Was passiert genau im Service? Hier? Wo??)
