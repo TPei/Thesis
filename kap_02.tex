@@ -1,16 +1,17 @@
 \chapter{Microservice Architektur als Weg robuste und skalierbare Anwendungen zu entwickeln}
 ``Microservice Architektur'' beschreibt einen Stil der Softwareentwicklung, der vor Allem durch die Trennung einer großen Gesamtanwendung, in kleinere, separate Teile gekennzeichnet ist.~\footcite[vgl.][Seite 2]{newman2015building}
-Entscheidend für die Microservice Architektur ist im wesentlichen die Abgrenzung zur monolithischen Anwendungsentwicklung.
+Entscheidend für die Microservice Architektur ist im wesentlichen die Abgrenzung zur monolithischen Anwendungsentwicklung, ebenso wie die Abgrenzung zur Service Oriented Architecture.
 
 \section{Microservices als Werkzeug zum Management von Komplexität}
 Monolithische Anwendungen bestehen im wesentlichen aus einer einzelnen Einheit.~\footcite[vgl.][]{Fowler:Intro} In einer klassischen drei-Schichten Anwendung (Frontend, Backend, Persistence Layer)~\footcite[vgl.][]{MSDN:TTA} bietet es sich an, die gesamte Logik in einer Anwendung zu verwalten. Dies ist auch der Standardaufbau der meisten Webframeworks. Es gibt eine Schnittstelle zwischen der clientseitigen und der serverseitigen Anwendung, ebenso wie zwischen der serverseitigen Anwendung und der Datenbank. Unabhängig wie unübersichtlich ein System mit zunehmender Größe wird, das zusammenhalten dieser Anwendungsteile ist der default Weg. Schwer zu handhabende, komplexe und große monolithische Anwendungen entstehen häufig dann, wenn bei Wachstum mit der Zeit dieser Aufbau nicht überdacht wird.~\footcite[vgl.][]{infaktuell}
 
 Anstatt einer großen Anwendung, deren einzelne Teile gemeinsam deployt werden, in einem gemeinsamen repository liegen und auf der Ebene der genutzten Programmiersprache kommunizieren, wird bei der Microservice Architektur die Gesamtanwendung hingegen in einzelne Teilanwendungen aufgesplittet. Diese liegen in separaten Repositories, können getrennt voneinander deployt werden und kommunizieren über externe Schnittstellen. Diese separaten Teilanwendungen sind meist anhand von Aufgabengebieten getrennt und identifiziert. Die Trennung nach Single Responsibility Principle~\footcite[vgl.][Seite 108]{Martin:SRP} wird hier von der Ebene des Codes in die Ebene der Gesamtarchitektur gehoben.
 
-Die Aufteilung einer monolithischen Gesamtanwendung in kleinere Services ist jedoch keineswegs ein Allheilmittel für alle Probleme. Microservice Architektur birgt seine ganz eigenen Herausforderungen. Microservice Architektur bringt demnach vor allem Unterschiede mit sich. Die Frage ob sich diese positiv oder negativ auswirken, hängt ganz individuell von der bestehenden Anwendung, dem Entwicklerteam und den vorhandenen Resourcen ab.
-
 Ein Architekturstil, der der Microservice Architektur ähnelt, ist die ``Service-Oriented Architecture''. Aufgrund der ähnlichen Ansätze, die dieser Architekturstil verfolgt, sollte er näher betrachtet werden.
 Service-Oriented Architecture (SOA) hat sich ebenfalls entwickelt, um die Probleme großer, monolithischer Anwendungen zu lösen.~\footcite[][Seite 8]{newman2015building} Mit Hilfe von Services, soll wiederverwendbarer Code geschaffen werden, der dann von verschiedenen Endanwendungen genutzt werden kann. Die Kommunikation findet über Netwerke statt und nicht mehr über direkte Aufrufe im Code. Auch SOA soll es einfacher machen Code zu organisieren, zu strukturieren und bei Bedarf zu ersetzen. Warum entsteht nun also der Trend der Microservices, wenn SOA einen ähnlichen Ansatz verfolgt? Ein großes Problem von SOA liegt eigentlich in den damit verbundenen Technologien wie SOAP, vendor middleware und der nicht ausreichend klaren Trennung der Services.~\footcite[][Seite 8]{newman2015building} SOA Services teilen sich z.B. oft Datenbanken, wohingegen dies ein no-go bei Microservices ist. SOA scheint zudem nicht klar genug definiert zu sein.~\footcite[vgl.][]{Fowler:Intro} Daher ist es ratsam einen klarer definierten Begriff, wie den der Microserice Architektur anzustreben.~\footcite[][]{Fowler:Intro}
+
+Die Aufteilung einer monolithischen Gesamtanwendung in kleinere Services ist jedoch keineswegs ein Allheilmittel für alle Probleme. Microservice Architektur birgt seine ganz eigenen Herausforderungen. Microservice Architektur bringt demnach vor allem Unterschiede mit sich. Die Frage ob sich diese positiv oder negativ auswirken, hängt ganz individuell von der bestehenden Anwendung, dem Entwicklerteam und den vorhandenen Resourcen ab.
+
 (FIX THIS IS NOT GOOD AT ALL)
 
 \section{Herausforderungen und Potentiale von Microservices}
@@ -25,13 +26,12 @@ Separate Deploys von Microservices machen die Versionsverwaltung von diesen jedo
 https://meinservice.tld/api/v1/eineRoute
 \end{lstlisting}
 
-angesprochen werden. Diese Schnittstelle wird von den Änderungen nicht tangiert. Die neue Schnittstelle umfasst sowohl die neuen, als auch alle alten, weiterhin gewünschten, Funktionen. Sie ist über die URL
-
+\noindent angesprochen werden. Diese Schnittstelle wird von den Änderungen nicht tangiert. Die neue Schnittstelle umfasst sowohl die neuen, als auch alle alten, weiterhin gewünschten, Funktionen. Sie ist über die URL
 \begin{lstlisting}[language=Ruby]
 https://meinservice.tld/api/v2/eineRoute
 \end{lstlisting}
 
-anzusprechen. Nach Deploy dieser neuen Service Version, wird als nächstes der konsumierende Code geupdated. Hierbei wird die Nutzung der Funktionen auf die neue Version aktualisiert und die Request auf die neue URL umgeleitet. Alle Referenzen zur alten Route des konsumierten Services sollten hierbei entfernt werden. Abschließend kann, solange sichergestellt ist, dass die alte Service Version nicht mehr genutzt wird, der Service ein weiteres mal geupdated werden. Hierbei wird der Code der alten Version entfernt. Dies ist in der Regel nur bei firmeninternen APIs üblich. Externe APIs sollten in veralteten Versionen noch eine gewisse Zeit angeboten werden. Sollte in der neuen API Version ein Fehler auftreten, muss, vorausgesetzt v1 ist unverändert zu erreichen, nur der konsumierende Service gerollbacked werden. Datenbankmigrationen müssen hier nach dem gleichen Prinzip ebenso in mehreren Schritten durchgeführt werden. Das deployment kann also in vielen Fällen bei Microservices leichter sein, gestaltet sich bei großen Änderungen jedoch schwieriger.
+\noindent anzusprechen. Nach Deploy dieser neuen Service Version, wird als nächstes der konsumierende Code geupdated. Hierbei wird die Nutzung der Funktionen auf die neue Version aktualisiert und die Request auf die neue URL umgeleitet. Alle Referenzen zur alten Route des konsumierten Services sollten hierbei entfernt werden. Abschließend kann, solange sichergestellt ist, dass die alte Service Version nicht mehr genutzt wird, der Service ein weiteres mal geupdated werden. Hierbei wird der Code der alten Version entfernt. Dies ist in der Regel nur bei firmeninternen APIs üblich. Externe APIs sollten in veralteten Versionen noch eine gewisse Zeit angeboten werden. Sollte in der neuen API Version ein Fehler auftreten, muss, vorausgesetzt v1 ist unverändert zu erreichen, nur der konsumierende Service gerollbacked werden. Datenbankmigrationen müssen hier nach dem gleichen Prinzip ebenso in mehreren Schritten durchgeführt werden. Das deployment kann also in vielen Fällen bei Microservices leichter sein, gestaltet sich bei großen Änderungen jedoch schwieriger.
 
 In diesem Zug sollte auch das Thema Testing angesprochen werden. Testen, gerade über die Grenzen von Services hinweg, ist durchaus eine Herausforderung die es zu meistern gilt (FIX FORMULIERUNG). Auf der anderen Seite tendieren große monolitische Anwendungen dazu, eine lange Testlaufzeit zu haben. Ab einer gewissen Größe ist es kaum noch möglich, dass der Entwickler alle Tests lokal ausführt. Der Einsatz von Continuous Integration schafft hier natürlich Abhilfe, doch auch hier sind die Ressourcen nicht unbegrenzt. Bei einer Vielzahl von Entwicklern, die parallel arbeiten, können auch mit mehreren concurrent builds Buildstaus oft nicht vermieden werden. Separate Codebases mit separaten kleineren Tests, haben hier vor Allem den großen Vorteil, dass nicht alle Tests immer erneut ausgeführt werden müssen.
 
@@ -39,17 +39,17 @@ Somit verhält sich die Gesamttestlaufzeit t stark unterschiedlich. Die Parallel
 
 $ t = \displaystyle\sum_{i=1}^{noOfCommits} Tt(codebase_i) $
 
-Die Gesamttestlaufzeit berechnet sich demnach additiv aus den Einzeltestlaufzeiten (Tt) der jeweiligen Codebases. Da die Einzeltestlaufzeit bei Microserices wesentlich geringer ist, kann hier enorm an Zeit gespart werden.
+\noindent Die Gesamttestlaufzeit berechnet sich demnach additiv aus den Einzeltestlaufzeiten (Tt) der jeweiligen Codebases. Da die Einzeltestlaufzeit bei Microserices wesentlich geringer ist, kann hier enorm an Zeit gespart werden.
 
 Bei vier Entwicklern und einer monolithischen Testlaufzeit von zehn Minuten erreicht man eine Gesamttestdauer von 40 Minuten
 
 $ t = \displaystyle\sum_{i=1}^{4} Tt(codebase_i) = 10m + 10m + 10m + 10m = 40m $
 
-Bei identischer Codebase, beliebig verteilt auf vier Microservices mit identischer Gesamttestdauer von zehn Minuten, erreicht man jedoch nur eine Testdauer von zehn Minuten 
+\noindent Bei identischer Codebase, beliebig verteilt auf vier Microservices mit identischer Gesamttestdauer von zehn Minuten, erreicht man jedoch nur eine Testdauer von zehn Minuten 
 
 $ t = \displaystyle\sum_{i=1}^{4} Tt(codebase_i) = 3m + 4m + 1m + 2m = 10m $
 
-Natürlich muss man zu der reinen Testdauer der Codebase einen gewissen Overhead im CI System einplanen, der nicht proportional zur Testdauer ist, dieser ist aber für die Ergebnisse zu vernachlässigen. Ebenso sollte die Zahl von Testfällen bei Microservice Architektur etwas erhöht sein, aber auch dies sollte im Vergleich zu einer großen monolithischen Anwendung noch zu einer großen Ersparnis führen.
+\noindent Natürlich muss man zu der reinen Testdauer der Codebase einen gewissen Overhead im CI System einplanen, der nicht proportional zur Testdauer ist, dieser ist aber für die Ergebnisse zu vernachlässigen. Ebenso sollte die Zahl von Testfällen bei Microservice Architektur etwas erhöht sein, aber auch dies sollte im Vergleich zu einer großen monolithischen Anwendung noch zu einer großen Ersparnis führen.
 
 Eine große Herausforderung beim Einsatz von Microservices ist jedoch das Testen selbst. Treten im Live Betrieb Fehler auf, ist es nicht leicht herauszufinden wo der Fehler wirklich entsteht. Ist es ein Fehler im konsumierten Service, im konsumierenden Service oder in der Kommunikation zwischen den beiden Seiten?
 
