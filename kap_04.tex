@@ -87,8 +87,46 @@ $ t = 16^{32} = 3,4 * 10^{32} $
 Selbst nach einer Milliarde generierter Schlüssel ist die Wahrscheinlichkeit von Kollisionsfreiheit demnach noch bei über $99,9999999999999999998$\%. Dies ist eine ausreichend hohe Sicherheit für den Anwendungsfall, zumal die Daten meist nach mehr als einem Tag nicht mehr abgefragt werden.
 
 \subsection{Architektur des Microservices}
-(FIX IS THIS RELEVANT??)
+%(FIX IS THIS RELEVANT??)
 Während der Entwicklung der Anwendung entwickelte ich durchgehend testgetrieben. Da die entwickelte Funktionalität einen integralen Bestandteil der Gesamtanwendung bildet, ist es zwingend notwendig die Funktionalität zu gewährleisten. Um die Qualität der Anwendung zu gewährleisten setzte ich die gleichen Tools ein, die auch in der Hauptanwendung genutzt werden. Als Testframework ist dies RSpec\footnote{http://rspec.info/}. Zur Überprüfung der Code Konventionen wird der Static Code Analyzer RuboCop\footnote{https://github.com/bbatsov/rubocop} eingesetzt. Der Einsatz von RSpec und RuboCop wird sowohl lokal, als auch automatisiert im Continuous Integration System Circle CI\footnote{https://circleci.com} eingesetzt. Fehler der Erfüllung der Fehlerfreiheit bei RSpec und Rubocop führen jeweils zu fehlerhaften Tests. Im eingesetzten Git System Github\footnote{https://github.com} wird bei jedem gepushten Commit automatisch ein Upload zu Circle CI getriggered. Bei Fehlern wird der Branch in Github als rot, ansonsten als grün markiert. Dies ist zwingende Voraussetzung für die den Einsatz von Continuous Deployment.
+
+Wie bereits beschrieben, handelt es sich beim entwickelten Microservice streng genommen lediglich um eine Query Schnittstelle zu einer Datenbank. Der Overhead soll hier möglichst gering gehalten werden. Da in der bestehenden Anwendung möglichst wenig Änderungen vorgenommen werden sollen und die Schnittstelle zur alten Datenbank übergangsweise weiterhin bestehen soll, bietet es sich an, an den Microservice zum Abfragen der Daten die bestehenden Datenbankfelnamen zu übergeben. Die bestehende Schnittstelle zu MongoDB bietet hier eine praktische $.to_json$ Methode mit der ein Query leicht in ein gut übertragbares Format überführt werden kann. Eine erstellte Abfrage auf alle Nutzer die als Sprache deutsch angegeben haben
+
+\begin{lstlisting}[language=Ruby]
+User.where(:'profile.basic.locale.value' => 'de')
+\end{lstlisting}
+
+\noindent kann so leicht in ein JSON-Format überführt werden:
+
+\begin{lstlisting}[language=Ruby]
+User.where(:'profile.basic.locale.value' => 'de').selector.to_json
+=> { "profile.basic.locale.value": "de"}"
+\end{lstlisting}
+
+\noindent So bildet das Übersetzen der übergebenen einen wesentlichen Teil des entwickelten Microservices. (FIX KOPPLUNG erklären und rechtfertigen)
+
+Einen weiteren wesentlichen Bestandteil bildet das handhaben des übergebenen JSON Strings. Dieser wird im ersten Schritt anhand einer JSON Schema\footnote{http://json-schema.org} Definition validiert. So wird sichergestellt das er wohlformattiert ist und den gestellten Anforderungen entspricht. Hier kann vor dem Schritt des wirklichen parsens ggf. noch einmal Last reduziert werden. War die Validierung erfolgreich wird der übergebene JSON String geparsed. Hierzu habe ich einen Parser entwickelt, der das übergeben MongoDB JSON Format in eine PostgreSQL kompatible Notation überführt. Schnell wird jedoch deutlich, dass es weitaus komplexere Querykonstrukte gibt. Da wäre zum Einen der Einsatz von Vergleichsoperatoren. Hier können leicht auch solche Queries entstehen:
+
+\begin{lstlisting}[language=Ruby]
+User.where(
+    :'profile.basic.locale.value'.nin => ['de', 'de-AT', 'de-CH'],
+    :'profile.automotive.car_amount.value'.gt => 3,
+    :'profile.automotive.car_amount.value'.lte => 10
+).selector.to_json
+=> 
+{
+    "profile.basic.locale.value": {
+        "$nin":["de","de-AT","de-CH"]
+    },
+    "profile.automotive.car_amount.value": {
+        "$gt":3,
+        "$lte":10
+    }
+}
+\end{lstlisting}
+
+\noindent Dies muss der Parser also auch übersetzen können. Im gleichen Schritt werden, neben dem Parsen, auch die Datenbankfeldnamen übersetzt.
+
 (FIX DEPLOYMENT/Continuous deployment??)
 (FIX Funktion?? Was passiert genau im Service? Hier? Wo??)
 (FIX Unterpunkte?)
@@ -110,7 +148,7 @@ Wie bereits im vorangegangenen Kapitel beschrieben, beschloss ich mich die neue 
     \includegraphics[scale=0.6]{klassendiagramm}
 \end{figure}
 
-Ist der Flipper aktiviert, wird zunächst ein per POST ein Query an den Service übertragen. Im Hintergrund initiiert der Service dann ein parsen, übersetzen und abarbeiten der Query, dies geschieht asynchron. Zunächst wird die Query in Redis gespeichert und der generierte Zugriffsschlüssel zurückgegeben.
+Ist der Flipper aktiviert, wird zunächst per POST ein Query an den Service übertragen. Im Hintergrund initiiert der Service dann ein parsen, übersetzen und abarbeiten der Query, dies geschieht asynchron. Zunächst wird die Query in Redis gespeichert und der generierte Zugriffsschlüssel zurückgegeben.
 Anhand dieses Schlüssels kann die Hauptanwendung dann die freigegebenen Ergebnisse des Querys, wie die Ids der zutreffenden User, abfragen. Der Ablauf kann wie in \autoref{fig:sequenz} visualisiert werden.
 
 \begin{figure}[!ht]
