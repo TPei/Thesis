@@ -42,6 +42,7 @@ Zwar haben wir klar getrennte Systeme, die von der Codebase her gut zu managen s
 Zudem müssen separate Systeme auch einzeln überwacht werden. Wo monolithische Anwendungen eine Quelle von Metriken, eine Anwendung zu überwachen und eine Anwendung zu deployen haben, haben Microservices viele.~\footcite[vgl.][]{Heroku:GoMicro}
 
 \subsection{Testing}
+\label{section:testing}
 In diesem Zug sollte auch das Thema Testing angesprochen werden. Testen, gerade über die Grenzen von Services hinweg, ist durchaus eine Herausforderung die es zu meistern gilt (FIX FORMULIERUNG). Auf der anderen Seite tendieren große monolitische Anwendungen dazu, eine lange Testlaufzeit zu haben. Ab einer gewissen Größe ist es kaum noch möglich, dass der Entwickler alle Tests lokal ausführt. Der Einsatz von Continuous Integration schafft hier natürlich Abhilfe, doch auch hier sind die Ressourcen nicht unbegrenzt. Bei einer Vielzahl von Entwicklern, die parallel arbeiten, können auch mit mehreren concurrent builds Buildstaus oft nicht vermieden werden. Separate Codebases mit separaten kleineren Tests, haben hier vor Allem den großen Vorteil, dass nicht alle Tests immer erneut ausgeführt werden müssen.
 
 Somit verhält sich die Gesamttestlaufzeit t stark unterschiedlich. Die Parallelität des Continuous Integration Servers vernachlässigend, berechnet sich die Gesamtlaufzeit der Tests wie folgt:
@@ -116,7 +117,7 @@ Das ``Scale Cube''\footcite[][]{abbott2009art} Modell beschreibt die drei Dimens
 \end{figure}
 
 Die Skalierung monolithischer Anwendungen beschränkt sich in der Regel insbesondere auf dieses Load Balancing.~\footcite[vgl.][]{infaktuell} 
-Da die Anwendungsreplikationen funktional identisch sind, ist die verteilte Last  unabhängig von den einzelnen Anwendungsteilen. Diese können eine unterschiedliche Individuallast haben, dies kann jedoch über den Load Balancer nicht beachtet werden.
+Da die Anwendungsreplikationen funktional identisch sind, ist die verteilte Last unabhängig von den einzelnen Anwendungsteilen. Diese können eine unterschiedliche Individuallast haben, dies kann jedoch über den Load Balancer nicht beachtet werden.
 
 Bei Microservices kann nun weiterhin auf der Y-Achse skaliert werden. Hier handelt es sich um eine funktionale Decomposition\footcite[][]{abbott2009art}. Anwendungen werden hier in verschiedene Services unterteilt. Jeder Service ist für eine bestimmte Funktion zuständig. So kann weitaus granulärer skaliert werden. erhält ein Teilsystem besonders viel Last, kann dieses beliebig skaliert werden. Die anderen Teilsysteme bleiben davon unberührt. Dies optimiert sowohl Leistung, als auch Kosten.
 
@@ -144,4 +145,7 @@ Bei der Aufsplittung des Monolithen bietet es sich hierbei an, sich am Saum (sea
 
 Im dritten Fall kann der neue Anwendungsteil nach idealen und neuen Vorstellungen entwickelt werden. Zwar muss auch hier eine Integration zum bestehenden Code geschaffen werden, es gibt aber keine bisherige Implementation die beachtet werden muss. Die Entwickler haben die freie Wahl, die bestmögliche Integrationsform zu wählen. Dies kann häufig zum besten Endprodukt führen, da keine Einschränkungen durch bestehenden Legacy Code die Programmierung beeinträchtigen. Natürlich wird hier aber ein komplett neues Feature entwickelt. Die Konzeption der Architektur, des Codes und die komplett neue Entwicklung können hier mit einem wesentlichen Mehraufwand verbunden sein. Die Integration in die bestehende Anwendung sollte aber in der Regel mit weniger Problemen verbunden sein.
 
-%(FIX Strangler Pattern? Wie stelle ich auf Microservices um??)
+Weiterhin stellt sich die Frage wie der Microservice in Betrieb genommen wird. Bildet der Microservice ein neues Feature, kann er schlicht eingebunden werden. Ersetzt der neue Service jedoch einen bestehenden Anwendungsteil, sollte hier mitunter nicht sofort die Anwendung umgestellt werden. Wie in \autoref{section:testing} beschrieben, bietet es sich an hier nach einem dem Load Balancing ähnlichen System nach und nach mehr Last auf den neuen Anwendungsteil zu leiten und das Fehlerverhalten zu überwachen.
+Ein Ansatz zum allgemeinen Ersetzen alten Codes durch neuen, ist das Strangler Pattern.~\footcite[][]{Fowler:Strangler} An geeigneten Stellen wird hier im Live Betrieb immer mehr Code an sich eignenden Stellen ersetzt und parallel betrieben. Eine neue Anwendung kann hier in agiler Weise um den bestehenden Code gewoben werden und diesen Schlussendlich komplett ersetzen.
+%(FIX Strangler Pattern hier nur angerissen, Dopplung. hmmm)
+%(FIX reference to subsection Testing)
