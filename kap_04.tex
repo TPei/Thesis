@@ -84,7 +84,8 @@ Zunächst überträgt die Hauptanwendung in Form eines POST requests die Query. 
 Redis speichert Werte grundsätzlich unter einem Stringschlüssel ab. Nach einem Query POST wird hierzu ein kryptischer Schlüssel erzeugt und direkt an die Clientanwendung zurückgegeben. Mit Hilfe der Ruby SecureRandom Bibliothek wird ein 32 Zeichen langer Hexadezimal Schlüssel erzeugt. Somit kann sichergestellt werden, das keine Queries anderer Nutzer ausgelesen werden können, in dem der Schlüssel beabsichtigt verändert wird. Da es keine verschiedenen Zugriffslevel der einzelnen Benutzer gibt, ist es nicht notwendig hier ein ausgefeiltes Authentifizierungssystem einzubauen. Lediglich aus Gründen der Privatsphäre werden hier keine fortlaufenden Schlüssel verwendet.
 Damit es jedoch auch nicht zu Kollisionen in der Schlüsselerzeugung kommt, wurde ein ausreichend langer Schlüssel gewählt. Bei einem 32 Zeichen langen Hexadezimal Schlüssel berechnet sich die Anzahl der möglichen Schlüssel wie folgt:
 $ t = 16^{32} = 3,4 * 10^{32} $
-Selbst nach einer Milliarde generierter Schlüssel ist die Wahrscheinlichkeit von Kollisionsfreiheit demnach noch bei über $99,9999999999999999998$\%. Dies ist eine ausreichend hohe Sicherheit für den Anwendungsfall, zumal die Daten meist nach mehr als einem Tag nicht mehr abgefragt werden.
+Selbst nach einer Milliarde generierter Schlüssel ist die Wahrscheinlichkeit von Kollisionsfreiheit demnach noch bei über $99,9999999999999999998$\%.%(FIX QUELLE)
+Dies ist eine ausreichend hohe Sicherheit für den Anwendungsfall, zumal die Daten meist nach mehr als einem Tag nicht mehr abgefragt werden.
 
 \subsection{Architektur des Microservices}
 %(FIX IS THIS RELEVANT??)
