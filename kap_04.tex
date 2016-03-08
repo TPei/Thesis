@@ -169,7 +169,8 @@ REST vor Allem im gemeinsamen Einsatz mit JSON-Schema und RAML, bildet eine reif
 (FIX RAM console)
 
 \section{Integration des Microservices in den Monolithen}
-Wie bereits im vorangegangenen Kapitel beschrieben, beschloss ich mich die neue Microservice Anwendung mit Hilfe des Flipper Gems parallel zu betreiben. Anhand der abstrahierten Schnittstelle des QueryExecuters, wird entschieden ob ein Query auf der alten Datenbank oder dem neuen Service stattfindet. Das entsprechende Klassendiagramm ist in \autoref{fig:class} dargestellt.
+Wie bereits im vorangegangenen Kapitel beschrieben, beschloss ich den neuen Microservice mit Hilfe eines dem Strangler Pattern ähnlichen Prinzips in die bestehende Anwendung einzubinden.
+Der Einsatz des Flipper Gems erlaubt es hierbei den bestehenden Code mit alter Datenbank, sowie den neuen Microservice mit neuer Datenbank parallel zu betreiben. Anhand der abstrahierten Schnittstelle des QueryExecuters, wird entschieden ob ein Query auf der alten Datenbank oder dem neuen Service stattfindet. Das entsprechende Klassendiagramm ist in \autoref{fig:class} dargestellt.
 \begin{figure}[!ht]
     \centering
     \caption{Klassendiagramm zur Verteilung zwischen bestehendem und neu geschaffenem Code}
