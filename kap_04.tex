@@ -5,7 +5,14 @@ Wie bereits in vorangegangenen Kapiteln beschrieben, bieten Microservices die M�
 
 \subsection{Wahl des Webframeworks}
 Die Hauptanwendung ist im Ruby Framework Ruby on Rails\footnote{http://rubyonrails.org} entwickelt worden. Ruby on Rails ist jedoch als Framework zu heavy-weight und mit zu viel Overhead verbunden, als das es sich f체r einen schnellen, minimalistischen Microservice eignen w체rde. Ruby on Rails ist an erster Stelle f체r monolithische Anwendungen entwickelt.~\footcite[][]{rails:doctrine}
-Hierbei ist nicht nur die Performance entscheident, sondern auch die Struktur des Codes. Rails als traditionelles Model-View-Controller Framework\footcite[][]{wiki:mvc} eignet sich somit vor Allem auch nicht aufgrund seiner Struktur. Die Rails API Variante\footnote{https://github.com/rails/rails/pull/19832} hingegen hat immer noch zu viel overead f체r eine optimierte Schnittstelle.
+Hierbei ist nicht nur die Performance entscheident, sondern auch die Struktur des Codes. Rails als traditionelles Model-View-Controller Framework\footcite[][]{wiki:mvc} eignet sich somit vor Allem auch nicht aufgrund seiner Struktur. Die minimalistischere Rails API Variante\footnote{https://github.com/rails/rails/pull/19832} hat zwar einen geringeren overhead als Rails, f체r einen geschwindigkeitsorientierten Microservice bieten sich weitere Optimierungen jedoch an.
+
+\begin{figure}[!ht]
+    \centering
+    \caption{Geschwindigkeitsvergleich Rails, Rails API und Sinatra \cite{newrelic:soa}}
+    \label{fig:speed}
+    \includegraphics[width=\textwidth]{rails_sinatra}
+\end{figure}
 
 Alternativen bilden sogenannte Microframeworks\footcite[][]{wiki:micro}. Microframeworks zeichnen sich im Gegensatz zu full-stack Frameworks dadurch aus, das viele der Funktionen nicht Teil des mitgelieferten Umfangs sind. In den meisten Sprachen gibt es diverse Microframeworks, wie z.B. Flask\footnote{http://flask.pocoo.org} f체r Python, Express\footnote{http://expressjs.com} f체r Node, Sparkjava\footnote{http://sparkjava.com}, oder das Sinatra Framework\footnote{http://www.sinatrarb.com} f체r Ruby. Die Sprache Go\footnote{https://golang.org} kommt bereits mit gut ausgebauten net/htttp Paketen und umfasst dadurch die meisten 체blichen Funktionen schon ohne Framework.
 
