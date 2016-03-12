@@ -4,8 +4,8 @@
 Wie bereits in vorangegangenen Kapiteln beschrieben, bieten Microservices die Möglichkeit zum optimierten Einsatz von Technologien. Für die zu entwickelnde Anwendung gab es diverse Optimierungsmöglichkeiten. Hier sollte zum Einen insbesondere auf die Wahl der Datenbanktechnologie, zum Anderen vor Allem auf die Wahl des Frameworks geachtet werden.
 
 \subsection{Wahl des Webframeworks}
-Die Hauptanwendung ist im Ruby Framework Ruby on Rails\cite{rails} entwickelt worden. Ruby on Rails ist jedoch als Framework zu heavy-weight und mit zu viel Overhead verbunden, als das es sich für einen schnellen, minimalistischen Microservice eignen würde. Ruby on Rails ist an erster Stelle für monolithische Anwendungen entwickelt.~\cite[][]{rails:doctrine}
-Hierbei ist nicht nur die Performance entscheident, sondern auch die Struktur des Codes. Rails als traditionelles Model-View-Controller Framework\cite[][]{wiki:mvc} eignet sich somit vor Allem auch nicht aufgrund seiner Struktur. Die minimalistischere Rails API Variante\cite{rails:api} hat zwar einen geringeren overhead als Rails, für einen geschwindigkeitsorientierten Microservice bieten sich weitere Optimierungen jedoch an.
+Die Hauptanwendung ist im Ruby Framework Ruby on Rails\cite{rails} entwickelt worden. Ruby on Rails ist jedoch als Framework zu \textit{heavy-weight} und mit zu viel Overhead verbunden, als das es sich für einen schnellen, minimalistischen Microservice eignen würde. Ruby on Rails ist an erster Stelle für monolithische Anwendungen entwickelt.~\cite[][]{rails:doctrine}
+Hierbei ist nicht nur die Performance entscheidend, sondern auch die Struktur des Codes. Rails als traditionelles Model-View-Controller Framework\cite[][]{wiki:mvc} eignet sich somit vor Allem auch nicht aufgrund seiner Struktur. Die minimalistischere Rails API Variante\cite{rails:api} hat zwar einen geringeren Overhead als Rails, für einen geschwindigkeitsorientierten Microservice bieten sich weitere Optimierungen jedoch an.
 
 \begin{figure}[!ht]
     \centering
@@ -14,25 +14,25 @@ Hierbei ist nicht nur die Performance entscheident, sondern auch die Struktur de
     \includegraphics[width=\textwidth]{rails_sinatra}
 \end{figure}
 
-Alternativen bilden sogenannte Microframeworks\cite{wiki:micro}. Microframeworks zeichnen sich im Gegensatz zu full-stack Frameworks dadurch aus, das viele der Funktionen nicht Teil des mitgelieferten Umfangs sind. In den meisten Sprachen gibt es diverse Microframeworks, wie z.B. Flask\cite{flask} für Python, Express\cite{expressjs} für Node, Sparkjava\cite{sparkjava}, oder das Sinatra Framework\cite{sinatra} für Ruby. Die Sprache Go\cite{golang} kommt bereits mit gut ausgebauten net/htttp Paketen und umfasst dadurch die meisten üblichen Funktionen schon ohne Framework.
+Alternativen bilden sogenannte Microframeworks\cite{wiki:micro}. Microframeworks zeichnen sich im Gegensatz zu full-stack Frameworks dadurch aus, das viele der Funktionen nicht Teil des mitgelieferten Umfangs sind. In den meisten Sprachen gibt es diverse Microframeworks, wie z.B. Flask\cite{flask} für Python, Express\cite{expressjs} für Node, Sparkjava\cite{sparkjava}, oder das Sinatra Framework\cite{sinatra} für Ruby. Die Sprache Go\cite{golang} kommt bereits mit gut ausgebauten net/http Paketen und umfasst dadurch die meisten üblichen Funktionen schon ohne Framework.
 
-Zwar gibt es Geschwindigkeitsunterschiede in diesen Frameworks\cite[vgl.][]{frameworks}, im Vergleich zu klassischen full-stack Frameworks sind diese aber unerheblich. Da die Datenbank in der bestehenden Anwendung den größten Flaschenhals bildet (FIX STATS), muss hier nicht zwangsläufig das beste Framework gewählt werden. Stattdessen sollte auf die bestehende Firmenstruktur geachtet werden. Da fast die gesamte Backendtechnologie bisher mit der Programmiersprache Ruby entwickelt ist und es somit keine anderen im Produktionsbetrieb eingesetzt wird, stellt es eine Schwierigkeit dar, eine neue Programmiersprache in die Firma zu integrieren. Vor allem da der neue Microservice auch mit einem komplett eigenen Produktionssetup verbunden ist, stellt eine in der Firma bisher unbekannte Programmiersprache eine ganz eigene Herausforderung dar. Um die Wartbarkeit des Systems hoch zu halten und die Risiken für den Betrieb zu minimieren, entschied ich mich daher auch im neuen Microservice die Programmiersprache Ruby einzusetzen. Da das Framework Ruby on Rails überproprtioniert ist und nicht den Anforderungen entspricht, entschied ich mich für den Einsatz des Ruby Frameworks Sinatra. 
+Zwar gibt es Geschwindigkeitsunterschiede in diesen Frameworks\cite[vgl.][]{frameworks}, im Vergleich zu klassischen full-stack Frameworks sind diese aber unerheblich. Da die Datenbank in der bestehenden Anwendung den größten Flaschenhals bildet (FIX STATS), muss hier nicht zwangsläufig das beste Framework gewählt werden. Stattdessen sollte auf die bestehende Firmenstruktur geachtet werden. Da fast die gesamte Backendtechnologie bisher mit der Programmiersprache Ruby entwickelt ist und es somit keine anderen im Produktionsbetrieb eingesetzt wird, wäre die Integration einer neuen Programmiersprache in das Unternehmn mit nicht unwesentlichen Kosten verbunden. Vor Allem, da der neue Microservice auch mit einem komplett eigenen Produktionssetup verbunden ist, stellt eine in der Firma bisher unbekannte Programmiersprache eine ganz eigene Herausforderung dar. Um die Wartbarkeit des Systems hoch zu halten und die Risiken für den Betrieb zu minimieren, entschied ich mich daher auch im neuen Microservice die Programmiersprache Ruby einzusetzen. Da das Framework Ruby on Rails überproportioniert ist und nicht den Anforderungen entspricht, entschied ich mich für den Einsatz des Ruby Frameworks Sinatra. 
 Sinatra ist nach Ruby on Rails das mit Abstand beliebteste Ruby Framework\cite[vgl.][]{ruby2015} und wird daher von den meisten Ruby Web Tools unterstützt.
 
-Wie bereits erwähnt, ist Sinatra ein sogenanntes Microframework. Sinatra selbst bringt also nicht viel Logik, die die Entwicklung beeinflusst. Einige Dinge die Sintra erleichtert, sind vor Allem das Routing. Hier kann schnell eine Routing Struktur erschaffen werden, die Definition von Routen und deren Antworten ist sehr komfortabel und schnell eingerichtet. Sinatra ist vor Allem auch nicht darauf ausgelegt in Antworten HTML zu rendern, so kann leicht eine JSON Response definiert werden.
-Eine Route zum Anlegen von Resourcen kann demnach so definiert werden:
+Wie bereits erwähnt, ist Sinatra ein sogenanntes Microframework. Sinatra selbst lässt also viel Raum für Konfiguration, unterstützt jedoch in den wesentlichen Zügen der Webentwicklung. Sinatra erleichtert so zum Beispiel das Routing enorm. Hier kann schnell eine Routing Struktur erschaffen werden, die Definition von Routen und deren Antworten ist sehr komfortabel und schnell einzurichten. Sinatra ist vor Allem auch nicht darauf ausgelegt in Antworten HTML zu rendern, so kann leicht eine JSON Response definiert werden.
+Eine Route zum Anlegen von Resourcen kann z.B. so definiert werden:
 \begin{lstlisting}[language=Ruby]
 class SomeController < Sinatra::Base
   post '/resources' do
     data = JSON.load(request.body.read)
     [...] # some actions to save the resource
-    # return appropriate 201 code and json with access key
-    [201, { data: { key: some_key  } }.to_json }]
+    # return appropriate 201 code
+    [201, { data: `success' }.to_json }]
   end
 end
 \end{lstlisting}
 
-Weiterhin erleichtert Sinatra das Betreiben eines Webservers und bietet eine Schnittstelle zum Ruby Standard Webserver Interface Rack\cite{rack}. Hier wird dem Entwickler viel Arbeit abgenommen. Viele Tools zum Betreiben von Webservices, z.B. im Bereich des Monitorings oder des Loggings unterstützen ebenfalls das Sinatra Framework. So bringt Sinatra also nicht viel overhead out of the box, bringt aber die Möglichkeit zur Nutzung vieler praktischer Erweiterungen.
+Weiterhin erleichtert Sinatra das Betreiben eines Webservers und bietet eine Schnittstelle zum Ruby Standard Webserver Interface Rack\cite{rack}. Hier wird dem Entwickler viel Arbeit abgenommen. Viele Tools zum Betreiben von Webservices, z.B. im Bereich des Monitorings oder des Loggings unterstützen ebenfalls das Sinatra Framework. So bringt Sinatra also nicht viel Overhead \textit{out of the box}, bringt aber die Möglichkeit zur Nutzung vieler praktischer Erweiterungen.
 
 Als Webserver wählte ich den Ruby Webserver Puma\cite{puma}. Puma ist ein Webserver mit verhältnismäßig geringem Speicherverbrauch, dadurch bietet er sich vor Allem für den Betrieb eines Microservices an.
 
@@ -41,7 +41,7 @@ Als Webserver wählte ich den Ruby Webserver Puma\cite{puma}. Puma ist ein Webse
 \subsection{Datenbanktechnologie}
 Da die Datenbank das scheinbar größte Problem der Performance in der bestehenden Anwendung bildet, ist es hier dringend notwendig die eingesetzte Technologie zu überdenken. Zwar ist MongoDB von der Idee her keine schlechte Wahl für die Userprofile, die Art wie Profildaten abgefragt werden, passt aber nicht gut zum dokumentorientierten Ansatz von MongoDB.
 Die Schemalosigkeit von MongoDB in Zusammenarbeit mit den recht variablen Profilen war ursprünglich der Hauptgrund diese Technologie einzusetzen. Nutzerprofile sind stark unterschiedlich, viele mit ja beantworteten Fragen führen zu weiteren Fragen (z.B. ``Haben Sie Kinder?'', ``Wie viele Kinder haben Sie?'', ``Wie alt ist Kind x?''). Hierbei bietet es sich durchaus an MongoDB mit seiner Embedded Document Struktur zu benutzten, statt unzählige 1 zu n Beziehungen zu verwalten.
-Bei der Abfrage der Daten versprucht MongoDB Geschwindigkeitsvorteile, wenn man einzelne Dokumente aus der Datenbank erhalten möchte. So kann zum Beispiel die Struktur einer Powerpoint Präsentation wie folgt abgebildet werden:
+Bei der Abfrage der Daten verspricht MongoDB Geschwindigkeitsvorteile, wenn man einzelne Dokumente aus der Datenbank erhalten möchte. So kann zum Beispiel die Struktur einer Powerpoint Präsentation wie folgt abgebildet werden:
 \begin{lstlisting}[language=Ruby]
 {
     presentationId: 1,
@@ -83,10 +83,16 @@ Beim Erstellen einer Query und dessen Ausführung über die Gesamtpopulation ist
 }
 \end{lstlisting}
 
-Hier wird auf eine verhältnismäßig geringe Zahl von Profilfelder, meist weniger als 10, über die gesamte Population gequeried. Weiterhin werden dann nicht gesamte Nutzerobjekte zurückgegeben, sondern lediglich die Anzahl der passenden Nutzer, deren Ids oder Antwortraten. Die MongoDB query Struktur ist dafür schlichtweg nicht optimiert. Hinzu kommt die extreme Verschachtelung der Datenstruktur. So werden nicht nur Profildaten wie Kinder in ein Subdokument gruppiert, es gibt auch noch thematische Unterteilungen der Profildaten, ``basic'' für die allgemeinen personenbezogenen Daten, ``basic.education'' für Daten über den Bildungsgrad.
-Hinzu kommt die relative Größe der Datenbank. Knapp 400.000 Userdaten mit bis zu 176 ausgefüllten Prodfilfeldern passen aktuell nicht einmal mehr in den Arbeitsspeicher der Server. Nicht alle Felder können logischerweise mit Indexen abgedeckt werden, die relative Verteilung der Queries umfasst aber alle Felder. Zwar gibt es besondere Häufungen der Queries bei bestimmten Feldern und diese sind auch durch Indexes abgedeckt, vor Allem aber die Queries auf die anderen Felder verlangsamen die Anwendung nicht unerheblich.
+Hier wird auf eine verhältnismäßig geringe Zahl von Profilfelder, meist weniger als 10, über die gesamte Population gequeried. Weiterhin werden dann nicht gesamte Nutzerobjekte zurückgegeben, sondern lediglich die Anzahl der passenden Nutzer, deren Ids oder Antwortraten. Die MongoDB Query Struktur ist dafür schlichtweg nicht optimiert.
 
-Hier besteht schlicht eine Diskrepanz zwischen den Queryanforderungen. Zum Einen wird hier dokumentenorientiert, zum Anderen spaltenorientiert gearbeitet. % (FIX TOO ABSOLUTE, it's not column oriented after all)
+Hinzu kommt, dass MongoDB Datenbanken auf 64 Indizes beschränkt sind\cite{mongo:indexlimit}. Da Nutzerprofile in Nutzern eingebettet sind, gehen für die Verwaltung der Nutzer zum Login schon diverese Indizes verloren. Bei der verhältnismäßig hohen Komplexität der Profile, mit 176 Feldern, reicht dies nicht aus.
+Weiterhin sind Ansätze wie ``Index Intersection'' und ``Partielle Indizes'' in MongoDB relativ neue Konzepte und noch nicht voll ausgereift\cite{mongo:indexintersection}\cite{mongo:partialindexes}.
+Zwar gibt es besondere Häufungen der Queries bei bestimmten Feldern und diese sind auch durch Indexe abgedeckt, vor Allem aber die Queries auf die anderen Felder verlangsamen die Anwendung erheblich.
+
+Hier besteht schlicht eine Diskrepanz zwischen den Queryanforderungen. Zum Einen wird hier dokumentenorientiert, zum Anderen spaltenorientiert gearbeitet.
+Die Pflege der Nutzerprofile durch die Nutzer geschieht dokumentorientiert. Für die Nutzer ist immer genau ein Nutzerprofil relevant, nämlich ihr eigenes. Das Nutzerprofil wird in seiner Gesamtheit aus der Datenbank angefragt, verändert und wieder abgespeichert.
+Das Nutzersampling hingegen geschieht spaltenorientiert. Über die Gesamtheit aller Nutzer wird eine bestimmte Menge von Feldern abgefragt und anschließend eine Spalte (z.B. die ids oder die Antwortraten der Nutzer) aus der Datenbank geladen.
+% (FIX TOO ABSOLUTE, it's not column oriented after all)
 Ein Ansatz diese Diskrepanz zwischen Nutzersampling und Profilpflege zu lösen, bietet die Command Query Responsibility Segregation (CQRS).~\cite[][]{fowler:cqrs} Gemäß der Anforderungen verschiedener Services bietet es sich hier an, die Darstellung von Daten, die theoretisch identisch sind, auf verschiedene Anwendungfälle zu optimieren. Auf Code Ebene können zum Beispiel separate Models genutzt werden um die Daten in individuelle Repräsentationsformen zu bringen. Auf Ebene der Datenbank kann ein komplett anderes Schema zur Repräsentation der Daten genutzt werden.
 
 \begin{figure}[!ht]
@@ -95,6 +101,8 @@ Ein Ansatz diese Diskrepanz zwischen Nutzersampling und Profilpflege zu lösen, 
     \label{fig:orientationsplit}
     \includegraphics[width=\textwidth]{orientation_comparison}
 \end{figure}
+
+Weiterhin führen Änderungen der Nutzerprofile in MongoDB auch immer zu einem \textit{write-lock}. Auch wenn dieser noch so kurz sein mag, er behindert doch immer das gleichzeitige Auslesen der Daten. Auch das spricht für eine neue, separate Datenbank zum Lesen der Daten für Samplingzwecke.
 
 Aufgrund der offensichtlichen Mängel im Schema im Bezug auf die Nutzerqueries bot es sich an, die Datenbanktechnologie zu wechseln und stattdessen eine SQL Datenbank zu verwenden. Im Gegensatz zum Wechsel der Programmiersprache, stellt der Einsatz einer anderen Datenbanktechnologie im konkreten Fall keine große Hürde dar. Im Betrieb besteht bereits eine MySQL\cite{mysql} Datenbank als Data Warehouse und eine PostgreSQL\cite{postgres} Datenbank für eine für einen Kunden betriebene Anwendung. Daher besteht Erfahrung sowohl in der Entwicklung mit, als auch dem Betrieb von SQL Datenbanken.
 
@@ -112,11 +120,18 @@ Eine Herausforderung bilden hier vor Allem die Felder der Klasse ChoiceFieldType
 
 Eine weitere Schwierigkeit stellen hier die EmbedsMany Felder dar. Auch hier ist eine `has-many` Relation notwendig, diese kann aber nicht, wie bei sich wiederholenden Auswahlfeldern, durch einen Bitstring ersetzt werden. (FIX MORE STUFF)
 
+%(FIX NOBODY CARES? TOO MUCH GELABER??)
+
 Zusätzlich zur relationalen Datenbank setzte ich in der Entwicklung weiterhin Redis\cite{redis} als Zwischenspeicher ein. Redis ist ein in-memory data store, der sowohl zu Datenbankzwecken, als auch zu caching Zwecken genutzt werden kann. Da die Daten ausschließlich im Arbeitsspeicher des Systems abgelegt werden, können hier sehr hohe Geschwindigkeiten erreicht werden.
 Zunächst überträgt die Hauptanwendung in Form eines POST requests die Query. Diese wird dann in Redis gespeichert. Die errechneten Queryergebnisse werden dann ebenfalls in Redis gespeichert. Die Ergebnisse können dann jederzeit von der Hauptanwendung abgefragt werden. Außerdem ist es möglich und perspektivisch geplant, die Geschwindigkeit von Redis für das Caching zu nutzen. Es kann überprüft werden ob übertragene Queries bereits bekannt sind und anhand dessen Alters die Ergebnisse übernommen werden. Weiterhin kann hier Performance gewonnen werden, da keine langfristige Persistenz gefordert ist. So kann Redis einzig und allein im Arbeitsspeicher speichern und muss nicht, wie sonst üblich, jede Änderung auf der Festplatte speichern.\cite{redis:faq}
 
+%(FIX FIRST I SAY ONLY IN-MEMORY, THEN I SAY ALSO ON DISK)
+
 \subsection{Architektur des Microservices}
-Wie bereits beschrieben, handelt es sich beim entwickelten Microservice streng genommen lediglich um eine Query Schnittstelle zu einer Datenbank. Der Overhead soll hier möglichst gering gehalten werden. Da in der bestehenden Anwendung möglichst wenig Änderungen vorgenommen werden sollen und die Schnittstelle zur alten Datenbank übergangsweise weiterhin bestehen soll, bietet es sich an, an den Microservice zum Abfragen der Daten die bestehenden Datenbankfelnamen zu übergeben. Die bestehende Schnittstelle zu MongoDB bietet hier eine praktische $.to_json$ Methode mit der ein Query leicht in ein gut übertragbares Format überführt werden kann. Eine erstellte Abfrage auf alle Nutzer die als Sprache deutsch angegeben haben
+Wie bereits beschrieben, handelt es sich beim entwickelten Microservice hauptsächlich um eine Query Schnittstelle. Der Overhead soll hier möglichst gering gehalten werden um die Geschwindigkeit zu optimieren.
+
+Da die bereits existierende Datenbank, aus den bereits beschriebenen Gründen weiter in der Betriebsawendung erhalten bleibt, bietet es sich an zur Abfrage der neuen Datenbankfelder, die alten Fednamen an den Microservice zu übergeben.
+Die bestehende Schnittstelle zu MongoDB bietet hier eine praktische \textit{.to\_json} Methode, mit der eine Query leicht in ein gut übertragbares Format überführt werden kann. Eine erstellte Abfrage auf alle Nutzer, die als Sprache deutsch angegeben haben:
 
 \begin{lstlisting}[language=Ruby]
 User.where(:'profile.basic.locale.value' => 'de')
@@ -129,7 +144,11 @@ User.where(:'profile.basic.locale.value' => 'de').selector.to_json
 => { "profile.basic.locale.value": "de" }
 \end{lstlisting}
 
-\noindent So bildet das Übersetzen der übergebenen einen wesentlichen Teil des entwickelten Microservices. (FIX KOPPLUNG erklären und rechtfertigen)
+\noindent So bildet das Übersetzen der übergebenen Feldnamen einen wesentlichen Teil des entwickelten Microservices.
+Diese Kopplung zwischen den Services ist zwar grundsätlich nicht ideal, aber im konkreten Anwendungsfall durchaus sinnvoll. Schließlich werden beide Datenbanken weiterhin parallel verwendet und die Umstellung soll mit einem möglichst geringen Aufwand durchgeführt werden.
+Es bietet sich jedoch an, in der Zukunft einen zentralen Punkt zur Pflege der Übersetzungen der Feldnamen einzurichten, um die Aktualität der Übersetzungen zu garantieren. Eine nur im Microservice verwaltete Übersetzung kann bei neu hinzugefügten Feldern in der MongoDB Datenbank leicht vergessen werden und schnell \textit{outdated} sein.
+
+%(FIX THIS IS WHERE I GO ON!!)
 
 Einen weiteren wesentlichen Bestandteil bildet das handhaben des übergebenen JSON Strings. Dieser wird im ersten Schritt anhand einer JSON Schema\cite{jsonschema} Definition validiert. So wird sichergestellt das er wohlformattiert ist und den gestellten Anforderungen entspricht. Hier kann vor dem Schritt des wirklichen parsens ggf. noch einmal Last reduziert werden. War die Validierung erfolgreich wird der übergebene JSON String geparsed. Hierzu habe ich einen Parser entwickelt, der das übergeben MongoDB JSON Format in eine PostgreSQL kompatible Notation überführt. Schnell wird jedoch deutlich, dass es weitaus komplexere Querykonstrukte gibt. Da wäre zum Einen der Einsatz von Vergleichsoperatoren. Hier können leicht auch solche Queries entstehen:
 
