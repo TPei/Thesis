@@ -29,7 +29,24 @@ Um die bestehende Betriebsanwendung auf Microservices umzustellen, wird hier äh
     \includegraphics[width=\textwidth]{strangulation}
 \end{figure}
 
-Da der entwicklete Microservice keine Schnittstelle zum Web, sondern nur zum bereits bestehenden Monolithen hat, beschloss ich hier statt mit einem Load Balancer, mit Hilfe des Ruby Flipper Gems\cite{flipper} nach und nach mehr Last auf den neu entstehenden Service zu verteilen.~\cite[vgl.][]{Hammant:Strangler} So kann beispielsweise für bestimmte Nutzer der neue Dienst aktiviert werden, während alle anderen Nutzer noch den alten Service nutzen können. Dies dient zum Einen dem Testen des neuen Services auf Fehler, zum Anderen zur Evaluierung von dessen Performance.
-Hierzu wird die zentrale Schnittstelle des QueryExecuters geschaffen. Die bestehende Schnittstelle zu MongoDB wird abstrahiert und um eine weitere, für den neuen Service ergänzt. Diese von den beiden Klassen gebotenen Schnittsellen sind identisch. Der QueryExecuter verteilt lediglich anhand der Flipper Logik an den neuen Microservice oder den bestehenden Code.
+Da der entwickelte Microservice keine Schnittstelle zum Web, sondern nur zum bereits bestehenden Monolithen hat, beschloss ich hier mit dem dem Strangler Pattern ähnlichen Prinzip der Feature Toggles\cite{fowler:featuretoggle} zu arbeiten. Statt mit einem Load Balancer, wird mit Hilfe des Ruby Flipper Gems\cite{flipper} nach und nach mehr Last auf den neu entstehenden Service zu verteilt.~\cite[vgl.][]{Hammant:Strangler}
+Feature Toggles zeichnen sich dadurch aus, das über einen ``Schalter'' im Code gesteuert wird ob Requests zum neuen oder zum alten Feature geleitet werden. Beim Flipper Gem wird das Feature hier anhand einer \textit{Flag} in der Datenbank nur für bestimmte Nutzer aktiviert. So können beispielsweise für bestimmte Nutzer, zum Beispiel zunächst nur der Entwickler des neuen Features, der neue Dienst aktiviert werden, während alle anderen Nutzer noch den alten Service nutzen können. Dies dient zum Einen dem Testen des neuen Services auf Fehler, zum Anderen zur Evaluierung von dessen Performance.
+Hierzu wird die zentrale Schnittstelle des QueryExecuters geschaffen. Die bestehende Schnittstelle zu MongoDB wird abstrahiert und um eine weitere, für den neuen Service ergänzt. Diese von den beiden Klassen gebotenen Schnittstellen sind identisch. Der QueryExecuter verteilt lediglich anhand der Flipper Logik an den neuen Microservice oder den bestehenden Code.
+
+Eine Beispielimplementierung zur Verwendung des Flipper Gems lässt sich so abbilden:
+\begin{lstlisting}[language=Ruby]
+def query_layer
+  if api_activated?
+    @query_layer = prophet
+  else
+    @query_layer = mongo
+  end
+end
+
+def api_activated?
+  flipper[:prophet_api].enabled?(querying)
+end
+\end{lstlisting}
+Der Query Executer fragt hier lediglich ab ob für das Querying Objekt in der Datenbank der Flipper für den neuen Microservice gesetzt ist. Ist dies der Fall, wird als Query Ebene der ProphetQuerier, ansonsten der MongoQuerier zurückgegeben.
 
 Da die Nutzerprofile noch auf Seiten der Verwaltung der User selbst in der Hauptanwendung benötigt werden, werden hier jedoch nicht alle Events abgefangen. Lediglich die, die das Querien im Bereich des Samplings betreffen. Um Datenkonsitenz zu gewährleisten, werden einmal täglich alle veränderten Daten in den Microservice geupdated. Da sich Userdaten nicht häufig ändern und sich unter 100 Nutzer am Tag registrieren, reicht dies aus um ausreichend gute Query Ergebnisse zu erzielen.
