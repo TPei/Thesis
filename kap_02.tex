@@ -5,7 +5,7 @@ Entscheidend für die Microservice Architektur ist im wesentlichen die Abgrenzun
 \section{Microservices als Werkzeug zum Management von Komplexität}
 Monolithische Anwendungen bestehen im wesentlichen aus einer einzelnen Einheit.~\cite[vgl.][]{Fowler:Intro} In einer klassischen Drei-Schichten-Anwendung (Frontend, Backend, Persistence Layer)~\cite[vgl.][]{MSDN:TTA}, wie in \autoref{fig:threetier} dargestellt, bietet es sich an, die gesamte Logik in einer Anwendung zu verwalten. Dies ist auch der Standardaufbau der meisten Webframeworks. Es gibt eine Schnittstelle zwischen der clientseitigen und der serverseitigen Anwendung, ebenso wie zwischen der serverseitigen Anwendung und der Datenbank. Unabhängig wie unübersichtlich ein System mit zunehmender Größe wird, das zusammenhalten dieser Anwendungsteile ist der Standardweg. Schwer zu handhabende, komplexe und große monolithische Anwendungen entstehen häufig dann, wenn eine Anwendung mit der Zeit wächst, der Aufbau der Anwendung jedoch nicht gut genug geplant wird.~\cite[vgl.][]{infaktuell}
 \begin{figure}[!ht]
-    \caption{Drei-Schichten Anwendungsverteilung (\cite{ThreeTieredDistribution})}
+    \caption{Drei-Schichten Anwendungsverteilung \cite{ThreeTieredDistribution}}
     \label{fig:threetier}
     \includegraphics[width=\textwidth]{three_tier_application}
 \end{figure}
@@ -93,7 +93,7 @@ Ein weiterer interessanter Punkt zum Betrieb von Microservices, ist das Thema de
 Das ``Scale Cube''\cite[][]{abbott2009art} Modell beschreibt die drei Dimensionsen der Anwendungsskalierbarkeit. Klassische Anwendungsskalierung geschieht vor allem auf der X-Achse, der horizontalen Duplikation\cite[][]{abbott2009art}. Skaliert wird hier, indem eine Anwendung dupliziert wird. Ein Load Balancer verteilt dann, nach bestimmten Regeln, die ankommenden Requests auf verschiedene Server.~\cite[vgl.][]{loadbalancing} 
 
 \begin{figure}[!ht]
-    \caption{Die Dimension des Skalierens (\cite{abbott2009art})}
+    \caption{Die Dimension des Skalierens \cite{abbott2009art}}
     \label{fig:scalecube}
     \includegraphics[width=\textwidth]{scale_cube}
 \end{figure}
