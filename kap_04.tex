@@ -271,3 +271,15 @@ Zur Bewertung der Performance des neu entwickelten Microservies wurde die neue D
 Beim Vergleich der Performance muss hier grundlegend in zwei Arten der Queries unterschieden werden. Zum Einen sind dies Queries auf solche Spalten, die durch Indizes abgedeckt sind, zum Anderen auf solche Spalten, die nicht durch Indizes abgedeckt sind.
 
 Wie teste ich überhaupt Performance von Webapplikationen??? \cite{msdn:perftesting}
+
+Performance Testing vs Load Testing vs Stress Testing
+
+Hier muss explizit darauf hingewiesen werden das es sich bei den durchgeführten Tests um reine Performance Tests, nicht aber Load oder Stress Tests handelt.
+Da eine vollkommene Lastfreiheit des bestehenden Live Systems schlicht unmöglich ist, wurden hier Testzeitpunkte mit möglichst geringer Last gewählt. Vor Tests wurde immer explizit sichergestellt, dass aktuell keine Berechnungen o.Ä. laufen. Dies war in der Regel in den frühren Morgenstunden (vor 7 Uhr) am besten möglich.
+
+Für den entwickelten Microservice war Lastfreiheit leicht zu garantieren, da der Zugriff, wie bereits beschrieben, über Feature Toggling kontrolliert wurde. Der Microservice nutzt auf AWS bisher die kleinsten Instanzgrößen und keinerlei Replikation oder Skalierung.
+
+Die Performance Tests wurden immer vom bestehenden Live System aus gestartet. Hierzu wurde eine SSH Verbindung aufgebaut und anschließend eine Konsole gestartet. Hier wurden direkt die QueryExecuter Subklassen des MongoidQueriers und des ProphetQueriers genutzt. Dies ist eine angebrachte Stelle zum Testen, da genau an dieser Stelle zwischen den beiden Features getoggled wird. Der restliche Query Ablauf ist im bisherigen System unverändert.
+
+Was habe ich gemacht??
+Grafiken??
