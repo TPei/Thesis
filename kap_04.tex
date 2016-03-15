@@ -261,3 +261,13 @@ Zusätzlich zum allgemeinen Ausfallmonitoring durch Amazon, integrierte ich das 
 Als Fehlerreporting Tool kommt im Microservice Bugsnag\cite{bugsnag} zum Einsatz. Bugsnag wird bereits als primäres Firmentool verwendet und eignet sich ebenfalls gut für kleine Anwendungen. Bugsnag zeichnet Fehler im System mit Stacktrace auf und informiert die Entwickler ebenfalls per Email.
 
 Das Informieren über Fehler per Email ist im Unternehmen ein durchaus üblicher Weg, daher eignet sich diese Integration auch für den neuen Service. Weiterhin besteht in der Firma ein Dashboard, was zwar nicht die Performance des neuen Microservices an sich, aber die Gesamtperformance des Sampling Prozesses darstellt. Dieser umschließt alles vom Erstellen der Query, der Abfrage des neuen Services, bis hin zum Verarbeiten und Anzeigen der Queryergebnisse. So können Probleme auf dem Dashboard leicht von den Entwicklern bemerkt werden. All dies sind im Live Betrieb erprobte Techniken und eignen sich dadurch sehr gut für die Ausweitung auf neue Services.
+
+\section{Auswertung}
+Hier hab ich mir ein neues Subkapitel ausgedacht, hier wäre eine Auswertung angebracht :)
+
+Hier bietet sich zum Beispiel eine Tabelle an um die Performancemessungen aufzuzeigen. Und ein paar Grafiken um das Ganze ganz hübsch zu machen.
+
+Zur Bewertung der Performance des neu entwickelten Microservies wurde die neue Datenbank mit Dummydaten gefüllt. Da im Rahmen der Bachelorarbeit aus Zeigründen kein vollständiges Ausformulieren des Themas möglich war, wurden hier zusätzlich zu einigen wenigen echten Feldern, 165 Dummyspalten des Typs String angelegt. Anschließend wurden die Spalten mit 200.000 Nutzerdaten gefüllt. Dieser Datenbestand diente als Grundlage alle folgenden Performanceanalysen. Zum Vergleich dazu wurde in der Primärdatenbank Anfragen auf ein Panel beschränkt. Nutzer sind hier je nach Umfrageplatform auf der sie sich registriert haben in verschiedene Panels unterteilt. Das ``EC'' Panel umfasst hier ebenfalls rund 200.000 registrierte Nutzer und diente als Grundlage der Vergleiche.
+Beim Vergleich der Performance muss hier grundlegend in zwei Arten der Queries unterschieden werden. Zum Einen sind dies Queries auf solche Spalten, die durch Indizes abgedeckt sind, zum Anderen auf solche Spalten, die nicht durch Indizes abgedeckt sind.
+
+Wie teste ich überhaupt Performance von Webapplikationen??? \cite{msdn:perftesting}
