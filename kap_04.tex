@@ -263,12 +263,11 @@ Als Fehlerreporting Tool kommt im Microservice Bugsnag\cite{bugsnag} zum Einsatz
 Das Informieren über Fehler per Email ist im Unternehmen ein durchaus üblicher Weg, daher eignet sich diese Integration auch für den neuen Service. Weiterhin besteht in der Firma ein Dashboard, was zwar nicht die Performance des neuen Microservices an sich, aber die Gesamtperformance des Sampling Prozesses darstellt. Dieser umschließt alles vom Erstellen der Query, der Abfrage des neuen Services, bis hin zum Verarbeiten und Anzeigen der Queryergebnisse. So können Probleme auf dem Dashboard leicht von den Entwicklern bemerkt werden. All dies sind im Live Betrieb erprobte Techniken und eignen sich dadurch sehr gut für die Ausweitung auf neue Services.
 
 \section{Auswertung}
-Zur Bewertung der Performance des neu entwickelten Microservies wurde die neue Datenbank mit Dummydaten gefüllt. Da im Rahmen der Bachelorarbeit aus Zeigründen kein vollständiges Ausformulieren des Themas möglich war, wurden hier zusätzlich zu einigen wenigen echten Feldern, 165 Dummyspalten des Typs String angelegt. Anschließend wurden die Spalten mit 200.000 Nutzerdaten gefüllt. Dieser Datenbestand diente als Grundlage aller folgenden Performanceanalysen. Zum Vergleich dazu wurde in der Primärdatenbank Anfragen auf ein Panel beschränkt. Nutzer sind hier je nach Umfrageplatform, auf der sie sich registriert haben, in verschiedene Panels unterteilt. Das ``EC'' Panel umfasst hier ebenfalls rund 200.000 registrierte Nutzer und diente als Grundlage der Vergleiche.
+Da der neue Microservice zum Zweck der Beschleunigung von Nutzerprofilqueries entwickelt wurde, ist hier insbesondere eine Auswertung der Geschwindigkeit des neuen Services angebracht. 
+Zur Bewertung der Performance des neu entwickelten Microservies wurde die neue Datenbank mit Dummydaten gefüllt. Da im Rahmen der Bachelorarbeit aus Zeigründen kein vollständiges Ausformulieren des Schemas möglich war, wurden hier zusätzlich zu einigen wenigen echten Feldern, 165 Dummyspalten des Typs String angelegt. Anschließend wurden die Spalten mit 200.000 Nutzerdaten gefüllt. Dieser Datenbestand diente als Grundlage aller folgenden Performanceanalysen. Zum Vergleich dazu wurde in der Primärdatenbank Anfragen auf ein Panel beschränkt. Nutzer sind hier je nach Umfrageplatform, auf der sie sich registriert haben, in verschiedene Panels unterteilt. Das ``EC'' Panel umfasst hier ebenfalls rund 200.000 registrierte Nutzer und diente als Grundlage der Vergleiche.
 Beim Vergleich der Performance muss hier grundlegend in zwei Arten der Queries unterschieden werden. Zum Einen sind dies Queries auf solche Spalten, die durch Indizes abgedeckt sind, zum Anderen auf solche Spalten, die nicht durch Indizes abgedeckt sind.
 
 Wie teste ich überhaupt Performance von Webapplikationen??? \cite{msdn:perftesting}
-
-Performance Testing vs Load Testing vs Stress Testing
 
 Hier muss explizit darauf hingewiesen werden das es sich bei den durchgeführten Tests um reine Performance Tests, nicht aber Load oder Stress Tests handelt.
 Da eine vollkommene Lastfreiheit des bestehenden Live Systems schlicht unmöglich ist, wurden hier Testzeitpunkte mit möglichst geringer Last gewählt. Vor Tests wurde immer explizit sichergestellt, dass aktuell keine Berechnungen o.Ä. laufen. Dies war in der Regel in den frühen Morgenstunden (vor 7 Uhr) am besten möglich.
@@ -279,7 +278,9 @@ Die Performance Tests wurden immer vom bestehenden Live System aus gestartet. Hi
 Was habe ich gemacht??
 Grafiken??
 
-Zum Messen der Performance wird hier die Ruby eigene Klasse ``Benchmark'' genutzt. Sie bietet sich für einfache Zeitmessungen an.
+Um die Performance des Microservices messen zu können, wurde dieser leicht angepasst. Da das Fehlerhandling noch nicht ausreichend integriert ist, wurde der Microservice hier auf eine synchrone Berechnung umgestellt. Die Hauptanwendung erhält den Zugriffsschlüssel also erst, wenn die Abfrage auf die Datenbank abgeschlossen ist. Dadurch wird zwar ggf. etwas Zeit für über die synchronen Netzwerkaufrufe verloren, die Messung der echten Queryzeit ist dadurch aber erst verlässlich möglich.
+
+Zum Messen der Performance wird hier die Ruby eigene Klasse ``Benchmark'' genutzt. Sie bietet sich für einfache Zeitmessungen an. Jede Query wurde als Selector formuliert und anschließend an die jeweiligen Klassen des MongoidQueriers und des ProphetQueriers übergeben. Anschließend wurde die Population (count) abgefragt. Queries wurden jeweils 100 mal ausgeführt. Die in \autoreg{fig:perftesttable} aufgelisteten Zahlen beziehen sich auf den daraus errechneten Durchschnitt einer einzelnen Query.
 
 \begin{figure}[!ht]
     \centering
@@ -288,4 +289,5 @@ Zum Messen der Performance wird hier die Ruby eigene Klasse ``Benchmark'' genutz
     \includegraphics[width=\textwidth]{performance_table}
 \end{figure}
 
-Die Ergebnisse ohne jegliche Optimierung auf Seiten des Microservices. Hier können definitiv noch Verbesserungen erzielt werden. Gerade über Indizes, die in MongoDB alle bereits verbraucht sind. Der Microservice nutzt auf AWS bisher die kleinsten Instanzgrößen, keinerlei Replikation oder Skalierung und keinerlei Indizes außer die zum Testen angelegten.
+Der Microservice nutzt auf AWS bisher die kleinsten Instanzgrößen, keinerlei Replikation oder Skalierung und keinerlei Indizes außer die zum Testen angelegten. 
+Hier ist davon auszuegehen, dass Optimierungen, wie sie auch in der Hauptanwendung genutzt werden, also Replikationen und größere Instanzen, noch Verbesserungen erzielen können. Gerade über Indizes, die in MongoDB bereits alle in Benutzung sind, ist hier von einer Verbesserung der Performance gegenüber der Hauptanwendung auszugehen.
