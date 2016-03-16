@@ -262,23 +262,22 @@ Als Fehlerreporting Tool kommt im Microservice Bugsnag\cite{bugsnag} zum Einsatz
 
 Das Informieren über Fehler per Email ist im Unternehmen ein durchaus üblicher Weg, daher eignet sich diese Integration auch für den neuen Service. Weiterhin besteht in der Firma ein Dashboard, was zwar nicht die Performance des neuen Microservices an sich, aber die Gesamtperformance des Sampling Prozesses darstellt. Dieser umschließt alles vom Erstellen der Query, der Abfrage des neuen Services, bis hin zum Verarbeiten und Anzeigen der Queryergebnisse. So können Probleme auf dem Dashboard leicht von den Entwicklern bemerkt werden. All dies sind im Live Betrieb erprobte Techniken und eignen sich dadurch sehr gut für die Ausweitung auf neue Services.
 
-\section{Auswertung}
+\section{Analyse der Performance des Microservices}
 Da der neue Microservice zum Zweck der Beschleunigung von Nutzerprofilqueries entwickelt wurde, ist hier insbesondere eine Auswertung der Geschwindigkeit des neuen Services angebracht. 
 Zur Bewertung der Performance des neu entwickelten Microservies wurde die neue Datenbank mit Dummydaten gefüllt. Da im Rahmen der Bachelorarbeit aus Zeigründen kein vollständiges Ausformulieren des Schemas möglich war, wurden hier zusätzlich zu einigen wenigen echten Feldern, 165 Dummyspalten des Typs String angelegt. Anschließend wurden die Spalten mit 200.000 Nutzerdaten gefüllt. Dieser Datenbestand diente als Grundlage aller folgenden Performanceanalysen. Zum Vergleich dazu wurde in der Primärdatenbank Anfragen auf ein Panel beschränkt. Nutzer sind hier je nach Umfrageplatform, auf der sie sich registriert haben, in verschiedene Panels unterteilt. Das ``EC'' Panel umfasst hier ebenfalls rund 200.000 registrierte Nutzer und diente als Grundlage der Vergleiche.
 Beim Vergleich der Performance muss hier grundlegend in zwei Arten der Queries unterschieden werden. Zum Einen sind dies Queries auf solche Spalten, die durch Indizes abgedeckt sind, zum Anderen auf solche Spalten, die nicht durch Indizes abgedeckt sind.
 
-Wie teste ich überhaupt Performance von Webapplikationen??? \cite{msdn:perftesting}
-
 Hier muss explizit darauf hingewiesen werden das es sich bei den durchgeführten Tests um reine Performance Tests, nicht aber Load oder Stress Tests handelt.
+Um die Testergebnisse möglichst represäntativ zu halten, wurde hier im Live System getestet.\cite{msdn:perftesting} 
 Da eine vollkommene Lastfreiheit des bestehenden Live Systems schlicht unmöglich ist, wurden hier Testzeitpunkte mit möglichst geringer Last gewählt. Vor Tests wurde immer explizit sichergestellt, dass aktuell keine Berechnungen o.Ä. laufen. Dies war in der Regel in den frühen Morgenstunden (vor 7 Uhr) am besten möglich.
 Für den entwickelten Microservice war Lastfreiheit leicht zu garantieren, da der Zugriff, wie bereits beschrieben, über Feature Toggling kontrolliert wurde. 
 
 Die Performance Tests wurden immer vom bestehenden Live System aus gestartet. Hierzu wurde eine SSH Verbindung aufgebaut und anschließend eine Ruby Konsole gestartet. Hier wurden direkt die QueryExecuter Subklassen des MongoidQueriers und des ProphetQueriers genutzt. Dies ist eine angebrachte Stelle zum Testen, da genau an dieser Stelle zwischen den beiden Features getoggled wird. Der restliche Query Ablauf ist im bisherigen System unverändert.
 
-Was habe ich gemacht??
-Grafiken??
-
 Um die Performance des Microservices messen zu können, wurde dieser leicht angepasst. Da das Fehlerhandling noch nicht ausreichend integriert ist, wurde der Microservice hier auf eine synchrone Berechnung umgestellt. Die Hauptanwendung erhält den Zugriffsschlüssel also erst, wenn die Abfrage auf die Datenbank abgeschlossen ist. Dadurch wird zwar ggf. etwas Zeit für über die synchronen Netzwerkaufrufe verloren, die Messung der echten Queryzeit ist dadurch aber erst verlässlich möglich.
+
+Der Microservice nutzt auf AWS bisher die kleinsten Instanzgrößen, keinerlei Replikation oder Skalierung und keinerlei Indizes außer die zum Testen angelegten. 
+Hier ist davon auszuegehen, dass Optimierungen, wie sie auch in der Hauptanwendung genutzt werden, also Replikationen und größere Instanzen, noch Verbesserungen erzielen können. Gerade über Indizes, die in MongoDB bereits alle in Benutzung sind, ist hier von einer Verbesserung der Performance gegenüber der Hauptanwendung auszugehen.
 
 Zum Messen der Performance wird hier die Ruby eigene Klasse ``Benchmark'' genutzt. Sie bietet sich für einfache Zeitmessungen an. Jede Query wurde als Selector formuliert und anschließend an die jeweiligen Klassen des MongoidQueriers und des ProphetQueriers übergeben. Anschließend wurde die Population (count) abgefragt. Queries wurden jeweils 100 mal ausgeführt. Die in \autoref{fig:perftesttable} aufgelisteten Zahlen beziehen sich auf den daraus errechneten Durchschnitt einer einzelnen Query.
 
@@ -289,13 +288,18 @@ Zum Messen der Performance wird hier die Ruby eigene Klasse ``Benchmark'' genutz
     \includegraphics[width=\textwidth]{performance_table}
 \end{figure}
 
-Der Microservice nutzt auf AWS bisher die kleinsten Instanzgrößen, keinerlei Replikation oder Skalierung und keinerlei Indizes außer die zum Testen angelegten. 
-Hier ist davon auszuegehen, dass Optimierungen, wie sie auch in der Hauptanwendung genutzt werden, also Replikationen und größere Instanzen, noch Verbesserungen erzielen können. Gerade über Indizes, die in MongoDB bereits alle in Benutzung sind, ist hier von einer Verbesserung der Performance gegenüber der Hauptanwendung auszugehen.
+Besonders auffällig sind die Zeitunterschiede zwischen den Abfragen der simplen Zahlen (COUNT) und dem Abfragen konkreter Daten (SELECT), wie \textit{ids} oder \textit{response rates}. Hier zeigen sich im Gegensatz zu MongoDB im Microservice keine signifikanten Zeitunterschiede. Dies ist auf die Abarbeitung der Query im Microservice zurückzuführen. Damit nur eine Query ausgeführt wird, werden hier alle erforderlichen Daten (\textit{ids}, \textit{response rates}, \textit{response rate sum} und \textit{count}) in einem Schritt aufbereitet. Es werden hierfür immer \textit{ids} und \textit{response rates} aus der Datenbank abgerufen. Anschließend werden diese gezählt und die die \textit{response rate sum} gebildet. Dadurch kommen Unterschiede lediglich durch Latenzvariation und ggf. Bilden der JSON Antwort zustande.
+In jedem Fall sollte darüber nachgedacht werden, inwiefern hier Optimierungen möglich sind. Eventuell bietet es sich an, die einzelnen Schritte wie in MongoDB aufzusplitten. Hierdurch würden sich aber vier Queries ergeben. Mitunter wären hier die COUNTs dann früher bereit, im Lebenszyklus eines Projektes werden jedoch immer alle Daten benötigt, demnach macht dies nur bedingt Sinn. 
 
-Besonders auffällig sind die Zeitunterschiede zwischen den Abfragen der simplen Zahlen (COUNT) und dem Abfragen konkreter Daten, wie \textit{ids} oder \textit{response rates}. Hier gibt es jedoch keinen Unterschied beim Microservice? Warum ist das so? Weil hier schlichtweg das gleiche passiert. Es werden hier alle Schritte ausgeführt, bevor die Daten bereitgestellt werden. Es muss jedoch darauf hingewiesen werden, dass im Microservice hier nie so große Datenmengen aus der Datenbank geholt werden wie in MongoDB. Das liegt einfach an der Zufälligkeit der Daten. Im Propheten wurden hier maximal rund 20.000 Felder gepluckt. Was für den Anwendungsfall durchaus realistisch, aber im Vergleich einfach nicht fair ist. Die letzte Zeile der Tabelle zeigt hier den direkten Vergleich beim Abfragen aller User IDs. Hier fällt die extreme Laufzeit des Microservices auf. Es ist nicht ganz klar, worauf dies zurück zu führen ist.
-In jedem Fall sollte darüber nachgedacht werden, inwiefern hier Optimierungen möglich sind. Eventuell bietet es sich an, die einzelnen Schritte wie in MongoDB aufzusplitten. Hierdurch würden sich aber vier Queries ergeben. Mitunter wären hier die counts dann früher bereit, im Lebenszyklus eines Projektes werden jedoch immer alle Daten benötigt, demnach macht dies nur bedingt Sinn. 
-Weiterhin ist nicht ganz klar, warum es überhaupt zu solch extremen Zeiten kommt. Dies ist vermutlich eher ein Problem im Code, als bei der Datenbankabfrage an sich. Dies ist vermutlich zu beheben.
-Nichtsdestotrotz hat man hier immer hohe Zeiten, bei einer Requestlaufzeit von 100ms, wird hier im ersten Schritt immer ein Fehler auftreten. Also wären hier immer mehrere Requests notwendig. Ggf. bietet es sich an, hier einen initialen Timeout, auf Basis der durchschnittlichen Berechnungslaufzeit, einzurichtetn um unnötige Requests zu sparen.
+Auffällig ist hier das SELECT aller ids (\textit{id not null}). Hier kommt es zu extremen Laufzeiten beim Microservice. Dies ist vermutlich eher ein Problem im Code, als bei der Datenbankabfrage an sich und daher behebbar. Es scheint auf die Hohe Zahl der Daten zurückzuführen zu sein (200.000). Bei den anderen Queries wurden in der Regel bis 20.000 Ergebnisse zurückgegeben. Dies geht über die üblichen Problemgrößen in der Anwendung bereits hinaus und ist daher für den Vergleich ausschlaggebend.
+Nichtsdestotrotz hat man hier immer relativ hohe Queryzeiten. Bei einer Requestlaufzeit von 100ms wird hier im ersten Schritt beim asynchronen Queryen der API immer ein Fehler auftreten. Also wären hier immer mehrere Requests notwendig. Ggf. bietet es sich an, hier einen initialen Timeout, auf Basis der durchschnittlichen Berechnungslaufzeit, einzurichten um unnötige Requests zu sparen.
 
 Im Allgemeinen wird aber ein Trend sichtbar. Bei üblichen Queries mit normalen Resultatgrößen auf Felder ohne Indizes kann schon jetzt Zeit gewonnen werden. Dies wird nur besser, wenn hier in PostgreSQL Indizes angelegt werden. 
-Auf Felder die in MongoDB bereits durch Indizes abgedeckt sind, kann hier keine Zeit gewonnen werden. Zwar sind diese Requests im neuen Service auch sehr schnell. Aber der einfache Overhead durch die Netzwerkkommunikation lässt hier eine höhere Zeit zustande kommen.
+Auf Felder die in MongoDB bereits durch Indizes abgedeckt sind, kann hier keine Zeit gewonnen werden. Zwar sind diese Requests im neuen Service auch sehr schnell, aber der einfache Overhead durch die Netzwerkkommunikation lässt hier eine höhere Zeit zustande kommen.
+
+\begin{figure}[!ht]
+    \centering
+    \caption{Durchschnittliche Query Laufzeiten in ms: index vs no index, count vs. select}
+    \label{fig:perftestgraph}
+    \includegraphics[width=\textwidth]{performance_graphs}
+\end{figure}
