@@ -280,7 +280,7 @@ Grafiken??
 
 Um die Performance des Microservices messen zu können, wurde dieser leicht angepasst. Da das Fehlerhandling noch nicht ausreichend integriert ist, wurde der Microservice hier auf eine synchrone Berechnung umgestellt. Die Hauptanwendung erhält den Zugriffsschlüssel also erst, wenn die Abfrage auf die Datenbank abgeschlossen ist. Dadurch wird zwar ggf. etwas Zeit für über die synchronen Netzwerkaufrufe verloren, die Messung der echten Queryzeit ist dadurch aber erst verlässlich möglich.
 
-Zum Messen der Performance wird hier die Ruby eigene Klasse ``Benchmark'' genutzt. Sie bietet sich für einfache Zeitmessungen an. Jede Query wurde als Selector formuliert und anschließend an die jeweiligen Klassen des MongoidQueriers und des ProphetQueriers übergeben. Anschließend wurde die Population (count) abgefragt. Queries wurden jeweils 100 mal ausgeführt. Die in \autoreg{fig:perftesttable} aufgelisteten Zahlen beziehen sich auf den daraus errechneten Durchschnitt einer einzelnen Query.
+Zum Messen der Performance wird hier die Ruby eigene Klasse ``Benchmark'' genutzt. Sie bietet sich für einfache Zeitmessungen an. Jede Query wurde als Selector formuliert und anschließend an die jeweiligen Klassen des MongoidQueriers und des ProphetQueriers übergeben. Anschließend wurde die Population (count) abgefragt. Queries wurden jeweils 100 mal ausgeführt. Die in \autoref{fig:perftesttable} aufgelisteten Zahlen beziehen sich auf den daraus errechneten Durchschnitt einer einzelnen Query.
 
 \begin{figure}[!ht]
     \centering
