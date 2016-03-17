@@ -97,6 +97,9 @@ selectors = [
     },
     { 
         :"id".ne => "560149a622f009176300004f" 
+    },
+    { 
+        :"id".ne => "nil" 
     }
 ]
 
@@ -105,7 +108,7 @@ selectors.each do |selector|
   timing = Benchmark.measure do
     100.times do
       mq = MongoidQuerier.new(selector, nil)
-      puts mq.population
+      mq.population
     end
   end
 
@@ -116,7 +119,7 @@ selectors.each do |selector|
   timing = Benchmark.measure do
     100.times do
       mq = MongoidQuerier.new(selector, nil)
-      puts mq.response_rates.count
+      mq.response_rates
     end
   end
 
@@ -127,7 +130,7 @@ selectors.each do |selector|
   timing = Benchmark.measure do
     100.times do
       pq = ProphetQuerier.new(selector)
-      puts pq.population
+      pq.population
     end
   end
 
@@ -138,7 +141,7 @@ selectors.each do |selector|
   timing = Benchmark.measure do
     100.times do
       pq = ProphetQuerier.new(selector)
-      puts pq.response_rates.count
+      pq.response_rates
     end
   end
 
