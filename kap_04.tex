@@ -1,4 +1,4 @@
-\chapter{Implementierung aufbauend auf bestehenden Technologien, REST API und Continuous Delivery}
+\chapter{Implementierung aufbauend auf bestehenden Technologien, REST API und Dynamic Hosting}
 
 \section{Sinatra und PostgreSQL zur Optimiertung des bestehenden Technologiestacks}
 Wie bereits in vorangegangenen Kapiteln beschrieben, bieten Microservices die Möglichkeit zum optimierten Einsatz von Technologien. Für die zu entwickelnde Anwendung gab es diverse Optimierungsmöglichkeiten. Hier sollte zum Einen insbesondere auf die Wahl der Datenbanktechnologie, zum Anderen vor Allem auf die Wahl des Frameworks geachtet werden.
@@ -222,7 +222,7 @@ Weitere Technologien zur Absicherung und Optimierung der Performance wurden bish
 
 Ein weiteres Thema, das bisher im Rahmen der Anwendungsentwicklung nicht beachtet wurde, ist das der Authentifizierung am Microservice. Offensichtlich ist es absolut sicherheitskritisch, dass nicht ohne jegliche Authentifizierung Daten vom Service abgefragt werden können. Hierzu bieten sich diverse Vorgehensweisen an. Zum einen sollte das Zugriffsrecht auf das IP Netz der konsumierenden monolithischen Anwendung beschränkt werden. Dies ist eine einfache Möglichkeit, ein relativ hohes Maß an Sicherheit zu generieren. Weiterhin sollte... (FIX MICROSERVICE SECURITY AND AUTHENTICATION)
 
-\section{Betrieb der Anwendung auf AWS - Betreuung, Monitoring und Scaling}
+\section{Betrieb der Anwendung auf AWS - Betreuung, Monitoring und Skalierung}
 Wie bereits beschrieben, bilden die Skalierungsmöglichkeiten von Microservices einen großen Vorteil des Architekturstils. Um diesen optimal ausnutzen zu können, bietet es sich an, eine dynamische Hostinglösung zu verwenden. Hier gibt diverse Lösungen, die alle einen ähnlichen Funktionsumfang bieten. Es muss jedoch grundlegend zwischen Platform as a Service (PaaS) und Infrastructure as a Service (IaaS) unterschieden werden. 
 Bei PaaS wird BLA bei IaaS wird hier BLA. FIX AUSBAU Unterschied
 Zu nennen sind hier z.B. die IaaS Lösungen Amazon Web Services (AWS) und Google Compute Engine\cite{googlecompute} und die PaaS Lösungen Google App Engine\cite{googleapp} und Heroku\cite{heroku}.
