@@ -40,7 +40,7 @@ Die Definition eines klaren, ``erforderten Standards'' \cite[vgl.][Seiten 20, 21
 \subsection{Verteilte Systeme}
 Eine große Herausforderung bei der Verwendung von Microservice Architektur, ist vor allem auch die Tatsache, dass es sich schlichtweg um verteilte Systeme handelt \cite[][]{microtradeoffs}.
 Tanenbaum und Van Steen definieren ``Verteilte Systeme'' als Sammlung unabhängiger Computer, die zum Benutzer als eine einzige, kohärente Einheit erscheinen \cite[][Seite 2]{tanenbaum2002distributed}.
-Zwar haben wir klar getrennte Systeme, die von der Codebase her gut zu managen sind, Remote Calls sind aber immer fehlerbehaftet. Der Service kann über das Netzwerk unerreichbar sein, die Antwort zu lange dauern und zu einem Timeout führen und im Allgemeinen dauern Remote Calls länger als Code Calls. Timeouts und langsame Serviceantworten können natürlich über asynchrone Aufrufe umgangen werden, aber asynchrone Aufrufe bringen ihre eigenen Probleme mit sich. Nicht umsonst spricht man hier oft in der Entwicklung von der Callback-Hell \cite[vgl.][]{callbackhell}. Zweifelsohne kann die Callback-Hell vermieden werden, die Integration einer Netzwerkschnittstelle in die Codebase birgt aber immer Gefahren. Man kann schlichtweg nicht von einem sicheren Netztwerk ausgehen, demnach bedarf es einem Sicherheitsmechanismus zur Authentifizierung. Bandbreite kann ggf. mit Kosten verbunden sein und ist nicht unbegrenzt verfügbar sein. Außerdem sind Netzwerke immer komplexer und unzuverlässiger als Aufrufe innerhalb einer Programmiersprache \cite[vgl.][]{distributedfallacies}.
+Zwar haben wir klar getrennte Systeme, die von der Codebase her gut zu managen sind, Remote Calls sind aber immer fehlerbehaftet. Der Service kann über das Netzwerk unerreichbar sein, die Antwort zu lange dauern und zu einem Timeout führen und im Allgemeinen dauern Remote Calls länger als Code Calls. Timeouts und langsame Serviceantworten können natürlich über asynchrone Aufrufe umgangen werden, aber asynchrone Aufrufe bringen ihre eigenen Probleme mit sich. Nicht umsonst spricht man hier oft in der Entwicklung von der ``Callback-Hell'' \cite[vgl.][]{callbackhell}. Zweifelsohne kann die Callback-Hell vermieden werden, die Integration einer Netzwerkschnittstelle in die Codebase birgt aber immer Gefahren. Man kann schlichtweg nicht von einem sicheren Netztwerk ausgehen, demnach bedarf es einem Sicherheitsmechanismus zur Authentifizierung. Bandbreite kann ggf. mit Kosten verbunden sein und ist nicht unbegrenzt verfügbar sein. Außerdem sind Netzwerke immer komplexer und unzuverlässiger als Aufrufe innerhalb einer Programmiersprache \cite[vgl.][]{distributedfallacies}.
 
 Zudem müssen separate Systeme auch einzeln überwacht werden. Wo monolithische Anwendungen eine Quelle von Metriken, eine Anwendung zu überwachen und eine Anwendung zu deployen haben, haben Microservices viele \cite[vgl.][]{Heroku:GoMicro}.
 
@@ -114,7 +114,7 @@ Zwar scheinen Microservices ein grundsätzlich lohnenswerter Architekturstil zu 
 \begin{figure}[!ht]
     \caption{Produktivität nach Komplexität: Monolith und Microservices \cite{fowler:micropremium}}
     \centering
-    \label{fig:micrpremium}
+    \label{fig:micropremium}
     \includegraphics[width=0.8\textwidth]{micropremium}
 \end{figure}
 
