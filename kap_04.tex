@@ -196,7 +196,7 @@ Der Einsatz des Flipper Gems \cite{flipper} erlaubt es hierbei den bestehenden C
     \centering
     \caption{Vereinfachtes Klassendiagramm zur Verteilung zwischen bestehendem und neu geschaffenem Code}
     \label{fig:class}
-    \includegraphics[scale=0.6]{klassendiagramm}
+    \includegraphics[scale=0.6]{klassendiagramm_updated}
 \end{figure}
 
 Ist der Toggle aktiviert, wird zunächst per POST eine Query an den Service übertragen. Im Hintergrund initiiert der Service dann das Parsen, Übersetzen und Abarbeiten der Query. Dies geschieht asynchron. Zunächst wird die Query in Redis gespeichert und der generierte Zugriffsschlüssel zurückgegeben.
@@ -281,7 +281,7 @@ Es wurden diverse, für die Anwendung typische, Queries gebildet und als Selecto
     \centering
     \caption{Performance Tests diverser Queries: MongoDB vs. SQL API}
     \label{fig:perftesttable}
-    \includegraphics[width=\textwidth]{performance_table}
+    \includegraphics[width=\textwidth]{performance_table_updated}
 \end{figure}
 
 Besonders auffällig sind die Zeitunterschiede zwischen den Abfragen der simplen Zahlen (COUNT) und dem Abfragen konkreter Daten (SELECT), wie \textit{ids} oder \textit{response rates}. Hier zeigen sich im Gegensatz zu MongoDB im Microservice keine signifikanten Zeitunterschiede. Dies ist auf die Abarbeitung der Query im Microservice zurückzuführen. Damit nur eine Query ausgeführt wird, werden hier alle erforderlichen Daten (\textit{ids}, \textit{response rates}, \textit{response rate sum} und \textit{count}) in einem Schritt aufbereitet. Es werden hierfür immer \textit{ids} und \textit{response rates} aus der Datenbank abgerufen. Anschließend werden diese gezählt und die \textit{response rate sum} gebildet. Dadurch kommen Unterschiede lediglich durch Latenzvariation und ggf. durch das Bilden der JSON Antwort zustande.
