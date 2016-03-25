@@ -1,4 +1,4 @@
-\chapter{Entwicklung einer real-time Query Anwendung zur Beschleunigung von Userprofilqueries}
+\chapter{Entwicklung einer real-time Query-Anwendung zur Beschleunigung von Userprofilqueries}
 In der bestehenden Betriebsanwendung werden Nutzer zum Zweck von Umfrageteilnahmen verwaltet. Nutzer pflegen Profilangaben, um dann passgenau zu Umfragen eingeladen zu werden.
 Ein wesentlicher Bestandteil der Anwendung bildet das Abfragen eben dieser Nutzerprofildaten. Um für Umfragen passgenau Teilnehmer auszuwählen, gibt es in der Profildatenbank, die knapp 400.000 Nutzer umfasst, 176 Profilfelder. Diese können in allen denkbaren Kombinationen abgefragt werden. Die besteheden Datenbankabfragen zeichnen sich durch sehr lange Laufzeiten aus. Die Gründe hierfür sollen erforscht und eine neue Echtzeitschnittstelle geschaffen werden.
 
@@ -9,9 +9,9 @@ Das Ziel der Neuentwicklung ist vor allem, die Profilqueries zu beschleunigen, o
 
 \section{Majestic Monolith vs Minimal Microservice}
 Um die genannten Probleme zu lösen, können jedoch verschiedene Lösungsansätze zur Optimierung verfolgt werden. Zum einen kann eine neue Datenbanktechnologie mit optimiertem Schema gewählt werden. Zum Anderen kann der Code auf Geschwindigkeit optimiert oder komplett neu geschrieben werden.
-Da die in der Anwendung eingesetzte Datenbank MongoDB noch für weitere Teile der Anwendung genutzt wird, kann sie nicht komplett ausgetauscht werden. Da es sich jedoch zur Optimierung sowohl anbietet eine neue Datenbanktechnologie einzusetzen, als auch den Code zu verbessern, bietet sich die Entwicklung eines separaten Microservices an. Hier kann eine optimierte Datenbanktechnologie eingesetzt werden ohne die bestehende Anwendung um weitere Strukturen und somit Komplexitäten zu ergänzen. Der Code kann restrukturiert und verbessert werden, in dem klarere und eindeutigere Strukturen und Aufteilungen geschaffen werden
+Da die in der Anwendung eingesetzte Datenbank MongoDB noch für weitere Teile der Anwendung genutzt wird, kann sie nicht komplett ausgetauscht werden. Da es sich jedoch zur Optimierung sowohl anbietet eine neue Datenbanktechnologie einzusetzen, als auch den Code zu verbessern, bietet sich die Entwicklung eines separaten Microservices an. Hier kann eine optimierte Datenbanktechnologie eingesetzt werden ohne die bestehende Anwendung um weitere Strukturen und somit Komplexitäten zu ergänzen. Der Code kann restrukturiert und verbessert werden, in dem klarere und eindeutigere Strukturen und Aufteilungen geschaffen werden.
 
-Des Weiteren erlaubt es ein separater Service passgenauere Skalierung. Durch dynamisches Hosting kann so also nicht nur die inhärente Performance von Code und Datenbank verbessert werden, sondern die reale auch dadurch, Ressourcen optimiert einzusetzen.
+Des Weiteren erlaubt ein separater Service passgenauere Skalierung. Durch dynamisches Hosting kann so also nicht nur die inhärente Performance von Code und Datenbank verbessert werden, sondern die reale auch dadurch, Ressourcen optimiert einzusetzen.
 Eine neue Datenbanktechnologie und neuer Code bieten sich zur Auslagerung in einen Microservice an. So wird der bestehende Code umgeschrieben um eine neue, separate Schnittstelle zu verwenden und im Funktionsumfang reduziert. Code zum Zweck der Nutzerabfragen findet sich in einer sauber getrennten Codebase und kann leicht gepflegt werden.
 
 \section{Mit dem Strangler Pattern vom Monolithen zur Microservice Architektur}
