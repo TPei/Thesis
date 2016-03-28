@@ -1,4 +1,4 @@
-\chapter{Entwicklung einer real-time Query-Anwendung zur Beschleunigung von Userprofilqueries}
+\chapter{Entwicklung einer real-time Query-Anwendung zur Beschleunigung von Nutzerprofilqueries}
 In der bestehenden Betriebsanwendung werden Nutzer zum Zweck von Umfrageteilnahmen verwaltet. Nutzer pflegen Profilangaben, um dann passgenau zu Umfragen eingeladen zu werden.
 Ein wesentlicher Bestandteil der Anwendung bildet das Abfragen eben dieser Nutzerprofildaten. Um für Umfragen passgenau Teilnehmer auszuwählen, gibt es in der Profildatenbank, die knapp 400.000 Nutzer umfasst, 176 Profilfelder. Diese können in allen denkbaren Kombinationen abgefragt werden. Die besteheden Datenbankabfragen zeichnen sich durch sehr lange Laufzeiten aus. Die Gründe hierfür sollen erforscht und eine neue Echtzeitschnittstelle geschaffen werden.
 
@@ -22,7 +22,7 @@ Dieses Vorgehen bietet viele Vorteile gegenüber dem kompletten Austausch einer 
 Zur Umsetzung dieses Ersetzens gibt es viele Wege. Zwei ebenfalls von Fowler vorgebrachte Strategien sind AssetCapture \cite[][]{Fowler:Capture} und EventInterception \cite[][]{Fowler:Interception}.
 Beim AssetCapture geht es vor allem darum, solche \textit{Assets} zu identifizieren, die sich leicht in die neue Teilanwendung migrieren lassen. Dies können z.B. bestimmte Tabellen in der Datenbank sein. Im Fall der zu entwickelnden Anwendung sind dies die Nutzerprofile.
 EventInterception geht mit AssetCapture Hand in Hand. Hierbei müssen alle Events auf die ausgelagerten Assets, also zum Beispiel das Abfragen von Profilen und das Anlegen neuer Profile, abgefangen und umgeleitet werden.
-So wird sichergestellt, dass die alten Ressourcen nicht mehr aktualisiert werden und es nicht zu Inkonsitenzen im Datenbestand kommt.
+So wird sichergestellt, dass die alten Ressourcen nicht mehr aktualisiert werden und es nicht zu Inkonsistenzen im Datenbestand kommt.
 Um die bestehende Betriebsanwendung auf Microservices umzustellen, wird hier ähnlich vorgegangen. Aus gegebenem Anlass wird der Query-Microservice als erster Strangler entwickelt. Die Nutzerprofile eignen sich gut um sie in eine neue Datenbank zu migrieren und in diesem Schritt gleich zu optimieren. Ein neuer Service verwaltet hierzu den Zugriff auf die Daten. Die bestehenden Events zum Abfragen von Nutzerprofildaten werden auf den neuen Service umgestellt. Hier wird eine Schnittstelle geschaffen, die sowohl Zugriff auf den neuen Service, als auch auf die alte Datenbank zulässt. Wird eine neue Anwendung mit Userschnittstelle geschaffen, bietet es sich an, einfach nach und nach mehr der Seitenzugriffe auf das neue System umzuleiten. Zum einen auf Makroebene, also Feature für Feature ablösen, aber auch auf Mikroebene bei Ersetzen eines Features. So können Fehler im neuen System minimiert und die Belastbarkeit des Systems sichergestellt werden.
 \begin{figure}[h]
     \caption{Load Balancer zur Strangulation Verteilung \cite{Hammant:Strangler}}
